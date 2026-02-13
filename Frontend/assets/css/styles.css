@@ -1,0 +1,26 @@
+:root {
+  --main: #0f2a2e;
+  --secondary: #164e56;
+  --accent: #4fd1c5;
+  --text: #e6fffa;
+}
+
+.bg-main {
+  background-color: var(--main);
+}
+.bg-secondary {
+  background-color: var(--secondary);
+}
+.text-accent {
+  color: var(--accent);
+}
+.btn-accent {
+  background-color: var(--accent);
+  color: #003333;
+}
+
+.login-card {
+  width: 320px;
+  background-color: var(--secondary);
+  color: var(--text);
+}
