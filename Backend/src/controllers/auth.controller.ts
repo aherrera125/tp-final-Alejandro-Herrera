@@ -10,8 +10,24 @@ export const register = async (req: Request, res: Response) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { username, email, password } = req.body;
-    await authService.register(username, email, password);
+    const {
+      username,
+      email,
+      password,
+      nombre,
+      apellido,
+      matricula,
+      especialidad,
+    } = req.body;
+    await authService.register(
+      username,
+      email,
+      password,
+      nombre,
+      apellido,
+      matricula,
+      especialidad,
+    );
 
     return res.status(201).json({ message: "Usuario creado exitosamente" });
   } catch (error: any) {

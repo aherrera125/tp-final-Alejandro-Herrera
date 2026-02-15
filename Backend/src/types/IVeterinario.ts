@@ -4,4 +4,5 @@ export interface IVeterinario {
   apellido: string;
   matricula: string;
   especialidad: string;
+  userid: number;
 }

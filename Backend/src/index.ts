@@ -20,7 +20,7 @@ app.use(express.json());
 // Middleware para servir archivos estáticos desde la carpeta "public"
 app.use(express.static(path.join(__dirname, "..", "public")));
 
-app.use("/auth", authRoutes);
+//app.use("/auth", authRoutes);
 
 // Ruta protegida (requiere autenticación)
 app.get("/protected", authenticate, (req, res) => {
@@ -39,6 +39,7 @@ app.get("/admin", authenticate, authorize(["admin"]), (req, res) => {
 });
 
 //Endpoints de la API
+app.use("/api/user", authRoutes);
 app.use("/api/duenios", dueniosRoutes);
 app.use("/api/mascotas", mascotasRoutes);
 app.use("/api/veterinarios", veterinariosRoutes);

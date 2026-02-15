@@ -132,3 +132,19 @@ curl -X GET http://localhost:3000/protected \
 
 curl -X GET http://localhost:3000/admin \
  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6InVzZXIiLCJpYXQiOjE3Njk5OTA5MDksImV4cCI6MTc3MDA3NzMwOSwiaXNzIjoiY3Vyc28tdXRuLWJhY2tlbmQifQ.4AK6GCFRmi5hx9h9kSCfs4XxHegcsPoejbJRqihg5xk"
+
+# USUARIOS
+
+# Crear un usuario nuevo
+
+curl -X POST http://localhost:3000/api/user/register \
+ -H "Content-Type: application/json" \
+ -d '{
+"username": "lluna",
+"email": "luis.luna@patitasfelices.com",
+"password": "SecurePass125!",
+"nombre": "Luis",
+"apellido": "Luna",
+"matricula": "qwe113",
+"especialidad": "Clinico"
+}'
