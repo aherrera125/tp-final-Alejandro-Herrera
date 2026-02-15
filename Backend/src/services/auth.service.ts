@@ -13,6 +13,10 @@ export const register = async (
   username: string,
   email: string,
   password: string,
+  nombre: string,
+  apellido: string,
+  matricula: string,
+  especialidad: string,
 ): Promise<number> => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -21,6 +25,16 @@ export const register = async (
     email,
     password: hashedPassword,
   });
+
+  const VeterinarioId = await userModel.createVeterinario({
+    nombre,
+    apellido,
+    matricula,
+    especialidad,
+    userid: userId,
+  });
+
+  const UserRoleId = await userModel.createUserRole(userId, 2); // 2 = role "user"
 
   return userId;
 };
