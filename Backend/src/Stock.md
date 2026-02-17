@@ -2,105 +2,163 @@
 
 # Obtener todos
 
-curl -X GET http://localhost:3000/api/duenios
+curl -X GET http://localhost:3000/api/duenios -H "Authorization: Bearer TU_TOKEN_AQUI"
 
 # Obtener por id
 
-curl -X GET http://localhost:3000/api/duenios/1
+curl -X GET http://localhost:3000/api/duenios/1 -H "Authorization: Bearer TU_TOKEN_AQUI"
 
-# Crear un dueño
+# Crear dueño pasando token de usuario logueado
 
 curl -X POST http://localhost:3000/api/duenios \
+ -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwicm9sZSI6InVzZXIiLCJpYXQiOjE3NzEzNTE3MjAsImV4cCI6MTc3MTQzODEyMCwiaXNzIjoiY3Vyc28tdXRuLWJhY2tlbmQifQ.0EnWr171C_ju8TBgqb7sVzNkBid74C8fNeBNTrQjEJA" \
  -H "Content-Type: application/json" \
- -d '{"nombre":"Juan","apellido":"Perez","telefono":123456789,"direccion":"Calle Falsa 123"}'
+ -d '{
+"nombre": "Julio",
+"apellido": "Perez",
+"telefono": 123456789,
+"direccion": "Calle Falsa 123"
+}'
 
 # Actualizar un dueño
 
 curl -X PUT http://localhost:3000/api/duenios/8 \
+ -H "Authorization: Bearer TU_TOKEN_AQUI" \
  -H "Content-Type: application/json" \
- -d '{"nombre":"Juan","apellido":"Gomez","telefono":987654321,"direccion":"Av. Siempreviva 742"}'
+ -d '{
+"nombre": "Juan",
+"apellido": "Gomez",
+"telefono": 987654321,
+"direccion": "Av. Siempreviva 742"
+}'
 
 # Eliminar un dueño
 
-curl -X DELETE http://localhost:3000/api/duenios/8
+curl -X DELETE http://localhost:3000/api/duenios/8 \
+ -H "Authorization: Bearer TU_TOKEN_AQUI"
 
 # MASCOTAS
 
 # Obtener todas
 
-curl -sS http://localhost:3000/api/mascotas
+curl -sS http://localhost:3000/api/mascotas \
+ -H "Authorization: Bearer TU_TOKEN_AQUI"
 
 # Obtener por id
 
-curl -sS http://localhost:3000/api/mascotas/1
+curl -sS http://localhost:3000/api/mascotas/1 \
+ -H "Authorization: Bearer TU_TOKEN_AQUI"
 
 # Crear una mascota
 
 curl -sS -X POST http://localhost:3000/api/mascotas \
+ -H "Authorization: Bearer TU_TOKEN_AQUI" \
  -H "Content-Type: application/json" \
- -d '{"nombre":"Fido","especie":"Perro","fecha_nacimiento":"2020-05-01","id_duenio":"2"}'
+ -d '{
+"nombre": "Fido",
+"especie": "Perro",
+"fecha_nacimiento": "2020-05-01",
+"id_duenio": "2"
+}'
 
 # Actualizar una mascota
 
 curl -sS -X PUT http://localhost:3000/api/mascotas/5 \
+ -H "Authorization: Bearer TU_TOKEN_AQUI" \
  -H "Content-Type: application/json" \
- -d '{"nombre":"Fido Actualizado","especie":"Perro","fecha_nacimiento":"2020-05-01","id_duenio":"2"}'
+ -d '{
+"nombre": "Fido Actualizado",
+"especie": "Perro",
+"fecha_nacimiento": "2020-05-01",
+"id_duenio": "2"
+}'
 
 # Eliminar una mascota
 
-curl -sS -X DELETE http://localhost:3000/api/mascotas/5
+curl -sS -X DELETE http://localhost:3000/api/mascotas/5 \
+ -H "Authorization: Bearer TU_TOKEN_AQUI"
 
 # VETERINARIOS
 
 # Obtener todos
 
-curl -sS http://localhost:3000/api/veterinarios
+curl -sS http://localhost:3000/api/veterinarios \
+ -H "Authorization: Bearer TU_TOKEN_AQUI"
 
 # Obtener por id
 
-curl -sS http://localhost:3000/api/veterinarios/1
+curl -sS http://localhost:3000/api/veterinarios/1 \
+ -H "Authorization: Bearer TU_TOKEN_AQUI"
 
 # Crear un veterinario
 
 curl -sS -X POST http://localhost:3000/api/veterinarios \
+ -H "Authorization: Bearer TU_TOKEN_AQUI" \
  -H "Content-Type: application/json" \
- -d '{"nombre":"María","apellido":"Perez","matricula":"MAT-123","especialidad":"Dermatología"}'
+ -d '{
+"nombre": "María",
+"apellido": "Perez",
+"matricula": "MAT-123",
+"especialidad": "Dermatología"
+}'
 
 # Actualizar un Veterinario
 
 curl -sS -X PUT http://localhost:3000/api/veterinarios/5 \
+ -H "Authorization: Bearer TU_TOKEN_AQUI" \
  -H "Content-Type: application/json" \
- -d '{"nombre":"María","apellido":"González","matricula":"MAT-123","especialidad":"Cirugía"}'
+ -d '{
+"nombre": "María",
+"apellido": "González",
+"matricula": "MAT-123",
+"especialidad": "Cirugía"
+}'
 
 # Eliminar un veterinario
 
-curl -sS -X DELETE http://localhost:3000/api/veterinarios/5
+curl -sS -X DELETE http://localhost:3000/api/veterinarios/5 \
+ -H "Authorization: Bearer TU_TOKEN_AQUI"
 
 # HISTORIAL CLINICO
 
 # Obtener todos
 
-curl -sS http://localhost:3000/api/historialClinico
+curl -sS http://localhost:3000/api/historialClinico \
+ -H "Authorization: Bearer TU_TOKEN_AQUI"
 
 # Obtener por id
 
-curl -sS http://localhost:3000/api/historialClinico/1
+curl -sS http://localhost:3000/api/historialClinico/1 \
+ -H "Authorization: Bearer TU_TOKEN_AQUI"
 
 # Crear un historial clinico
 
 curl -sS -X POST http://localhost:3000/api/historialClinico \
+ -H "Authorization: Bearer TU_TOKEN_AQUI" \
  -H "Content-Type: application/json" \
- -d '{"id_mascota":"3","id_veterinario":"2","fecha_registro":"2024-02-01","descripcion":"Chequeo anual: todo ok"}'
+ -d '{
+"id_mascota": "3",
+"id_veterinario": "2",
+"fecha_registro": "2024-02-01",
+"descripcion": "Chequeo anual: todo ok"
+}'
 
 # Actualizar un historial clinico
 
 curl -sS -X PUT http://localhost:3000/api/historialClinico/5 \
+ -H "Authorization: Bearer TU_TOKEN_AQUI" \
  -H "Content-Type: application/json" \
- -d '{"id_mascota":"3","id_veterinario":"2","fecha_registro":"2024-02-02","descripcion":"Tratamiento completado"}'
+ -d '{
+"id_mascota": "3",
+"id_veterinario": "2",
+"fecha_registro": "2024-02-02",
+"descripcion": "Tratamiento completado"
+}'
 
 # Eliminar un historial clinico
 
-curl -sS -X DELETE http://localhost:3000/api/historialClinico/5
+curl -sS -X DELETE http://localhost:3000/api/historialClinico/5 \
+ -H "Authorization: Bearer TU_TOKEN_AQUI"
 
 # REGISTRACION Y AUTORIZACION
 
@@ -135,7 +193,7 @@ curl -X GET http://localhost:3000/admin \
 
 # USUARIOS
 
-# Crear un usuario nuevo
+# Crear un usuario nuevo (Register)
 
 curl -X POST http://localhost:3000/api/user/register \
  -H "Content-Type: application/json" \
@@ -151,7 +209,7 @@ curl -X POST http://localhost:3000/api/user/register \
 
 # LOGIN
 
-# Ingresar con mail y pass
+# Ingresar con mail y pass (Login)
 
 curl -X POST http://localhost:3000/api/user/login \
  -H "Content-Type: application/json" \
