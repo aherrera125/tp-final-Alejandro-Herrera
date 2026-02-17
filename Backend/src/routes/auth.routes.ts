@@ -15,7 +15,9 @@ const authLimiter = rateLimit({
   message: "Demasiados intentos, inténtalo de nuevo más tarde",
 });
 
+//api/user/register
 router.post("/register", authLimiter, registerValidator, register);
+//api/user/login
 router.post("/login", authLimiter, loginValidator, login);
 
 export default router;

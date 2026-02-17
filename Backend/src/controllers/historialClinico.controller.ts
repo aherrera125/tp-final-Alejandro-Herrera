@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { IVeterinario } from "../types/IVeterinario";
 import * as historialClinicoService from "../services/historialClinico.service";
 import { IHistorialClinico } from "../types/IHistorialClinico";
 
@@ -34,12 +33,37 @@ export const getById = async (_req: Request, res: Response) => {
       .json({ message: `Error al obtener el historial clínico con id ${id}.` });
   }
 };
+//getByUserId
+export const getByUserId = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user!.id.toString(); // 👈 SALE DEL TOKEN
+    const historialClinicoData =
+      await historialClinicoService.getHistorialClinicoByUserId(userId);
+
+    if (!historialClinicoData) {
+      return res
+        .status(404)
+        .json({ message: "Historial clínico no encontrado." });
+    }
+
+    return res.status(200).json(historialClinicoData);
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error al obtener el historial clínico",
+    });
+  }
+};
 //create()
 export const create = async (req: Request, res: Response) => {
   try {
+    const userId = req.user!.id.toString(); // 👈 SALE DEL TOKEN
     const historialClinicoData: IHistorialClinico = req.body;
+
     const historialClinicoCreated =
-      await historialClinicoService.addHistorialClinico(historialClinicoData);
+      await historialClinicoService.addHistorialClinico(
+        userId,
+        historialClinicoData,
+      );
     return res.status(201).json({ historialClinicoCreated });
   } catch (error) {
     return res

@@ -2,6 +2,7 @@ import { IHistorialClinico } from "../types/IHistorialClinico";
 import {
   findAllHistorialClinico,
   findHistorialClinicoById,
+  findHistorialClinicoByUserId,
   createHistorialClinico,
   updateHistorialClinico,
   deleteHistorialClinico,
@@ -17,8 +18,17 @@ export const getHistorialClinicoById = async (
   return await findHistorialClinicoById(id);
 };
 
-export const addHistorialClinico = async (data: IHistorialClinico) => {
-  return await createHistorialClinico(data);
+export const getHistorialClinicoByUserId = async (
+  userId: string,
+): Promise<IHistorialClinico | null> => {
+  return await findHistorialClinicoByUserId(userId);
+};
+
+export const addHistorialClinico = async (
+  userId: string,
+  data: IHistorialClinico,
+) => {
+  return await createHistorialClinico(userId, data);
 };
 
 export const editHistorialClinico = async (
