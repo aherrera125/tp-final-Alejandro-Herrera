@@ -2,7 +2,6 @@ import express from "express";
 import path from "path";
 import "dotenv/config";
 import authRoutes from "./routes/auth.routes";
-//import { authenticate, authorize } from "./middlewares/auth.middleware";
 import dueniosRoutes from "./routes/duenios.routes";
 import mascotasRoutes from "./routes/mascotas.routes";
 import veterinariosRoutes from "./routes/veterinarios.routes";
@@ -20,27 +19,7 @@ app.use(express.json());
 // Middleware para servir archivos estáticos desde la carpeta "public"
 app.use(express.static(path.join(__dirname, "..", "public")));
 
-/*
-// Ruta protegida (requiere autenticación)
-app.get("/protected", authenticate, (req, res) => {
-  res.json({
-    message: "Acceso permitido",
-    user: req.user,
-  });
-});
-
-// Ruta protegida (requiere autenticación y autorización para roles específicos)
-// Ruta de administrador (requiere autenticación y rol admin)
-app.get("/admin", authenticate, authorize(["admin"]), (req, res) => {
-  res.json({
-    message: "Acceso de administrador permitido",
-    user: req.user,
-  });
-});
-*/
-
 //Endpoints de la API
-//app.use("/auth", authRoutes);
 app.use("/api/user", authRoutes);
 app.use("/api/duenios", dueniosRoutes);
 app.use("/api/mascotas", mascotasRoutes);
