@@ -24,17 +24,50 @@ export const findHistorialClinicoById = async (
   return rows.length ? rows[0] : null;
 };
 
+export const findHistorialClinicoByUserId = async (
+  userId: string,
+): Promise<IHistorialClinico | null> => {
+  const [rows] = await pool.query<HistorialClinicoRow[]>(
+    `SELECT ma.id, ma.nombre, ma.especie, ma.fecha_nacimiento, 
+     vt.id, vt.nombre, vt.apellido, vt.matricula, vt.especialidad
+     FROM historial_clinico hc 
+     INNER JOIN mascotas ma on ma.id = hc.id_mascota
+     INNER JOIN veterinarios ve ON ve.id = hc.id_veterinario 
+     INNER JOIN users us ON us.id = ve.user_id 
+     WHERE us.id = ?`,
+    [userId],
+  );
+  return rows.length ? rows[0] : null;
+};
+
 export const createHistorialClinico = async (
-  historialClinico: Omit<IHistorialClinico, "id">,
+  userId: string,
+  historialClinico: Omit<IHistorialClinico, "id" | "id_veterinario">,
 ): Promise<number> => {
+  const [veterinarioIdRows]: any = await pool.query(
+    `SELECT vt.id 
+     FROM veterinarios vt
+     INNER JOIN users us ON us.id = vt.user_id
+     WHERE us.id = ?`,
+    [userId],
+  );
+
+  if (!veterinarioIdRows || veterinarioIdRows.length === 0) {
+    throw new Error("Veterinario no encontrado para el usuario");
+  }
+
+  const veterinarioId = veterinarioIdRows[0].id;
+
+  if (!historialClinico.id_mascota || !historialClinico.descripcion) {
+    throw new Error("Faltan datos obligatorios para crear historial clínico");
+  }
+
+  const { id_mascota, descripcion } = historialClinico;
+
   const [historialClinicoResult] = await pool.query(
-    "INSERT INTO HISTORIAL_CLINICO (id_mascota, id_veterinario, fecha_registro, descripcion) VALUES (?,?,?,?)",
-    [
-      historialClinico.id_mascota,
-      historialClinico.id_veterinario,
-      historialClinico.fecha_registro,
-      historialClinico.descripcion,
-    ],
+    `INSERT INTO HISTORIAL_CLINICO (id_mascota, id_veterinario, descripcion) 
+     VALUES (?,?,?)`,
+    [id_mascota, veterinarioId, descripcion],
   );
   return (historialClinicoResult as any).insertId;
 };

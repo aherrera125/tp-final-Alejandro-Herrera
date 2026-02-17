@@ -2,7 +2,7 @@ import express from "express";
 import path from "path";
 import "dotenv/config";
 import authRoutes from "./routes/auth.routes";
-import { authenticate, authorize } from "./middlewares/auth.middleware";
+//import { authenticate, authorize } from "./middlewares/auth.middleware";
 import dueniosRoutes from "./routes/duenios.routes";
 import mascotasRoutes from "./routes/mascotas.routes";
 import veterinariosRoutes from "./routes/veterinarios.routes";
@@ -20,8 +20,7 @@ app.use(express.json());
 // Middleware para servir archivos estáticos desde la carpeta "public"
 app.use(express.static(path.join(__dirname, "..", "public")));
 
-//app.use("/auth", authRoutes);
-
+/*
 // Ruta protegida (requiere autenticación)
 app.get("/protected", authenticate, (req, res) => {
   res.json({
@@ -30,6 +29,7 @@ app.get("/protected", authenticate, (req, res) => {
   });
 });
 
+// Ruta protegida (requiere autenticación y autorización para roles específicos)
 // Ruta de administrador (requiere autenticación y rol admin)
 app.get("/admin", authenticate, authorize(["admin"]), (req, res) => {
   res.json({
@@ -37,8 +37,10 @@ app.get("/admin", authenticate, authorize(["admin"]), (req, res) => {
     user: req.user,
   });
 });
+*/
 
 //Endpoints de la API
+//app.use("/auth", authRoutes);
 app.use("/api/user", authRoutes);
 app.use("/api/duenios", dueniosRoutes);
 app.use("/api/mascotas", mascotasRoutes);
@@ -49,3 +51,5 @@ app.use("/api/historialClinico", historialClinicoRoutes);
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT} 🚀`);
 });
+
+// authenticate y authorize se usan en las tutas

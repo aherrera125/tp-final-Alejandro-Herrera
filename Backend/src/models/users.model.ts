@@ -15,7 +15,11 @@ export const findUser = async (
   username: string = "",
 ): Promise<IUsuario | null> => {
   const [rows] = await pool.query<UserRow[]>(
-    "SELECT u.*, r.name as role FROM users u LEFT JOIN user_roles ur ON u.id = ur.user_id LEFT JOIN roles r ON ur.role_id = r.id WHERE u.email = ? OR u.username = ? LIMIT 1",
+    `SELECT u.*, r.name as role 
+     FROM users u 
+     LEFT JOIN user_roles ur ON u.id = ur.user_id 
+     LEFT JOIN roles r ON ur.role_id = r.id 
+     WHERE u.email = ? OR u.username = ? LIMIT 1`,
     [email, username],
   );
 

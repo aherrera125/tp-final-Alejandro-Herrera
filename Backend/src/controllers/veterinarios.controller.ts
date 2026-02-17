@@ -29,6 +29,28 @@ export const getById = async (_req: Request, res: Response) => {
       .json({ message: `Error al obtener el veterinario con id ${id}.` });
   }
 };
+//getByUserId
+export const getByUserId = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user!.id.toString(); // 👈 SALE DEL TOKEN
+
+    console.log("user_id desde el token:", userId);
+
+    const veterinarioData =
+      await veterinariosService.getVeterinarioByUserId(userId);
+
+    if (!veterinarioData) {
+      return res.status(404).json({ message: "Veterinario no encontrado." });
+    }
+
+    return res.status(200).json(veterinarioData);
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error al obtener el veterinario",
+    });
+  }
+};
+
 //create()
 export const create = async (req: Request, res: Response) => {
   try {

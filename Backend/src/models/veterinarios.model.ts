@@ -13,6 +13,15 @@ export const findAllVeterinarios = async (): Promise<IVeterinario[]> => {
   return rows;
 };
 
+export const findVeterinarioByUserId = async (
+  user_id: string,
+): Promise<IVeterinario | null> => {
+  const [rows] = await pool.query<VeterinarioRow[]>(
+    "SELECT * FROM VETERINARIOS WHERE user_id = ?",
+    [user_id],
+  );
+  return rows.length ? rows[0] : null;
+};
 export const findVeterinarioById = async (
   id: string,
 ): Promise<IVeterinario | null> => {

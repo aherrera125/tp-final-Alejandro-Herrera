@@ -148,3 +148,33 @@ curl -X POST http://localhost:3000/api/user/register \
 "matricula": "qwe113",
 "especialidad": "Clinico"
 }'
+
+# LOGIN
+
+# Ingresar con mail y pass
+
+curl -X POST http://localhost:3000/api/user/login \
+ -H "Content-Type: application/json" \
+ -d '{
+"email": "luis.luna@patitasfelices.com",
+"password": "SecurePass125!"
+}'
+
+# Obtener los datos del usuario logueado en base al token
+
+curl -X GET http://localhost:3000/api/veterinarios/me \
+ -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwicm9sZSI6InVzZXIiLCJpYXQiOjE3NzEyODQ1MTYsImV4cCI6MTc3MTM3MDkxNiwiaXNzIjoiY3Vyc28tdXRuLWJhY2tlbmQifQ.7WrSDyjSjiCcpINS6cd_o7XOTBVrQc1UMWf4wESQOyc"
+
+# Obtener historia clinica en base al token del usuario logueado
+
+curl -X GET "http://localhost:3000/api/historialClinico/me" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwicm9sZSI6InVzZXIiLCJpYXQiOjE3NzEyODQ1MTYsImV4cCI6MTc3MTM3MDkxNiwiaXNzIjoiY3Vyc28tdXRuLWJhY2tlbmQifQ.7WrSDyjSjiCcpINS6cd_o7XOTBVrQc1UMWf4wESQOyc"
+
+# Crear una historia clinica del usurio logueado en base al token generado en el login
+
+curl -X POST http://localhost:3000/api/historialClinico \
+ -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwicm9sZSI6InVzZXIiLCJpYXQiOjE3NzEzNDQ2MzksImV4cCI6MTc3MTQzMTAzOSwiaXNzIjoiY3Vyc28tdXRuLWJhY2tlbmQifQ.OhUZ2jI_dgpaSdZeqqokXpD-TgCKjrqq91f2p6no_6c" \
+ -H "Content-Type: application/json" \
+ -d '{
+"id_mascota": 1,
+"descripcion": "Consulta por vacunación"
+}'

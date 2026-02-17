@@ -1,12 +1,38 @@
 import { Router } from "express";
+import { authenticate, authorize } from "../middlewares/auth.middleware";
 import * as mascotasController from "../controllers/mascotas.controller";
 
 const router = Router();
 
-router.get("/", mascotasController.getAll);
-router.get("/:id", mascotasController.getById);
-router.post("/", mascotasController.create);
-router.put("/:id", mascotasController.update);
-router.delete("/:id", mascotasController.delet);
+router.get(
+  "/",
+  authenticate,
+  authorize(["user", "admin"]),
+  mascotasController.getAll,
+);
+router.get(
+  "/:id",
+  authenticate,
+  authorize(["user", "admin"]),
+  mascotasController.getById,
+);
+router.post(
+  "/",
+  authenticate,
+  authorize(["user", "admin"]),
+  mascotasController.create,
+);
+router.put(
+  "/:id",
+  authenticate,
+  authorize(["user", "admin"]),
+  mascotasController.update,
+);
+router.delete(
+  "/:id",
+  authenticate,
+  authorize(["user", "admin"]),
+  mascotasController.delet,
+);
 
 export default router;
