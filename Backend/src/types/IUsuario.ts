@@ -3,5 +3,11 @@ export interface IUsuario {
   username: string;
   email: string;
   password: string;
-  role: "user" | "admin";
+  created_at?: Date;
+  updated_at?: Date;
+  nombre: string;
+  apellido: string;
+  especialidad: string;
+  matricula: string;
+  //role: "user" | "admin";
 }

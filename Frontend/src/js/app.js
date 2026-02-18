@@ -1,11 +1,39 @@
+let formData = document.getElementById("loginForm");
+
+formData.addEventListener("submit", function (e) {
+  e.preventDefault(); // Evita que el formulario se envíe de forma tradicional
+  let email = document.getElementById("email").value;
+  let password = document.getElementById("password").value;
+
+  fetch("/api/user/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: email, // luis.luna@patitasfelices.com
+      password: password, // SecurePass125!
+    }),
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      return res.json(); // normalmente devuelve { token: "..." }
+    })
+    .then((data) => {
+      console.log("Token recibido:", data.token);
+      // ejemplo: guardarlo en localStorage para usar en otros endpoints
+      localStorage.setItem("token", data.token);
+      window.location.href = "/dashboard.html"; // redirige a la página principal después del login
+    })
+    .catch((err) => console.error("Error en login:", err));
+});
+
 let mascotas = [];
 
-function login() {
-  window.location.href = "./dashboard.html";
-}
+//function login() {}
 
 function logout() {
-  window.location.href = "./index.html";
+  window.location.href = "../../index.html";
 }
 
 function agregarMascota() {

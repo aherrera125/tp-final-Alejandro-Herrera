@@ -1,67 +1,76 @@
 import pool from "../database/mysql";
 import { RowDataPacket } from "mysql2";
-import { IVeterinario } from "../types/IVeterinario";
 import { IUsuario } from "../types/IUsuario";
-import { PoolConnection } from "mysql2/promise";
+import { ResultSetHeader } from "mysql2";
 
-export const getConnection = async (): Promise<PoolConnection> => {
-  return pool.getConnection();
+export type UsuarioRow = IUsuario & RowDataPacket;
+
+export const findAllUsers = async (): Promise<IUsuario[]> => {
+  const [rows] = await pool.query<UsuarioRow[]>("SELECT * FROM USERS");
+  return rows;
 };
 
-export type UserRow = IUsuario & RowDataPacket;
-
-export const findUser = async (
-  email: string = "",
-  username: string = "",
-): Promise<IUsuario | null> => {
-  const [rows] = await pool.query<UserRow[]>(
-    `SELECT u.*, r.name as role 
-     FROM users u 
-     LEFT JOIN user_roles ur ON u.id = ur.user_id 
-     LEFT JOIN roles r ON ur.role_id = r.id 
-     WHERE u.email = ? OR u.username = ? LIMIT 1`,
-    [email, username],
+export const findUserById = async (id: string): Promise<IUsuario | null> => {
+  const [rows] = await pool.query<UsuarioRow[]>(
+    "SELECT * FROM USERS WHERE id = ?",
+    [id],
   );
-
   return rows.length ? rows[0] : null;
 };
 
 export const createUser = async (
-  user: Omit<IUsuario, "id" | "role">,
+  usuario: Omit<IUsuario, "id">,
 ): Promise<number> => {
-  const [userResult] = await pool.query(
-    "INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
-    [user.username, user.email, user.password],
+  const [usuarioResult] = await pool.query(
+    `INSERT INTO USERS (username, email, password, nombre, apellido, matricula, especialidad) 
+     VALUES (?,?,?,?,?,?,?)`,
+    [
+      usuario.username,
+      usuario.email,
+      usuario.password,
+      usuario.nombre,
+      usuario.apellido,
+      usuario.matricula,
+      usuario.especialidad,
+    ],
   );
-
-  return (userResult as any).insertId;
+  return (usuarioResult as any).insertId;
 };
 
-export const createVeterinario = async (
-  veterinario: Omit<IVeterinario, "id">,
-): Promise<number> => {
-  const [veterinarioResult] = await pool.query(
-    "INSERT INTO VETERINARIOS (nombre, apellido, matricula, especialidad, user_id) VALUES (?,?,?,?,?)",
+export const updateUser = async (
+  id: string,
+  usuario: IUsuario,
+): Promise<IUsuario | null> => {
+  const [result] = await pool.query<ResultSetHeader>(
+    `UPDATE USERS
+     SET nombre = ?, apellido = ?, matricula = ?, especialidad = ?
+     WHERE id = ?`,
     [
-      veterinario.nombre,
-      veterinario.apellido,
-      veterinario.matricula,
-      veterinario.especialidad,
-      veterinario.userid,
+      usuario.nombre,
+      usuario.apellido,
+      usuario.matricula,
+      usuario.especialidad,
+      id,
     ],
   );
 
-  return (veterinarioResult as any).insertId;
-};
+  if (result.affectedRows === 0) {
+    return null;
+  }
 
-export const createUserRole = async (
-  userId: number,
-  roleId: number,
-): Promise<number> => {
-  const [userResult] = await pool.query(
-    "INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)",
-    [userId, roleId],
+  // volver a buscar la usuario actualizada
+  const [rows] = await pool.query<UsuarioRow[]>(
+    "SELECT * FROM USERS WHERE id = ?",
+    [id],
   );
 
-  return (userResult as any).insertId;
+  return rows[0];
+};
+
+export const deleteUser = async (id: string): Promise<boolean> => {
+  const [result] = await pool.query<ResultSetHeader>(
+    "DELETE FROM USERS WHERE id = ?",
+    [id],
+  );
+  return result.affectedRows > 0;
 };
