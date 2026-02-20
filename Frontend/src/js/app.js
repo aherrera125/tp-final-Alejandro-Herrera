@@ -5,7 +5,7 @@ formData.addEventListener("submit", function (e) {
   let email = document.getElementById("email").value;
   let password = document.getElementById("password").value;
 
-  fetch("/api/user/login", {
+  fetch("/auth/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

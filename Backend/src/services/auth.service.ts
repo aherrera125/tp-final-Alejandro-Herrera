@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import * as userModel from "../models/userss.model";
+import * as userModel from "../models/users.model";
 import jwt, { SignOptions } from "jsonwebtoken";
 import { JwtPayload, UserRole } from "../types/auth";
 
@@ -24,17 +24,13 @@ export const register = async (
     username,
     email,
     password: hashedPassword,
-  });
-
-  const VeterinarioId = await userModel.createVeterinario({
     nombre,
     apellido,
     matricula,
     especialidad,
-    userid: userId,
   });
 
-  const UserRoleId = await userModel.createUserRole(userId, 2); // 2 = role "user"
+  //const UserRoleId = await userModel.createUserRole(userId, 2); // 2 = role "user"
 
   return userId;
 };
@@ -45,7 +41,7 @@ export const login = async (
 ): Promise<string> => {
   const invalidCredentialsError = new Error("Credenciales inválidas");
 
-  const user = await userModel.findUser(email);
+  const user = await userModel.findUserByEmail(email);
   if (!user) throw invalidCredentialsError;
 
   const isValid = await bcrypt.compare(password, user.password);

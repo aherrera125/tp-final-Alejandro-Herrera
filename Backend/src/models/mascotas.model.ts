@@ -12,7 +12,7 @@ export const findAllMascotas = async (): Promise<IMascota[]> => {
 
 export const findMascotaById = async (id: string): Promise<IMascota | null> => {
   const [rows] = await pool.query<MascotaRow[]>(
-    "SELECT * FROM MASCOTAS MA WHERE MA.id = ?",
+    "SELECT * FROM MASCOTAS WHERE id = ?",
     [id],
   );
   return rows.length ? rows[0] : null;
@@ -22,12 +22,13 @@ export const createMascota = async (
   mascota: Omit<IMascota, "id">,
 ): Promise<number> => {
   const [MascotaResult] = await pool.query(
-    "INSERT INTO MASCOTAS (id_dueno, nombre, especie, fecha_nacimiento ) VALUES (?,?,?,?)",
+    "INSERT INTO MASCOTAS (id_dueno, nombre, especie, fecha_nacimiento, estado ) VALUES (?,?,?,?,?)",
     [
       mascota.id_duenio,
       mascota.nombre,
       mascota.especie,
       mascota.fecha_nacimiento,
+      1, // estado activo por defecto
     ],
   );
   return (MascotaResult as any).insertId;
@@ -39,13 +40,14 @@ export const updateMascota = async (
 ): Promise<IMascota | null> => {
   const [result] = await pool.query<ResultSetHeader>(
     `UPDATE MASCOTAS
-     SET id_dueno = ?, nombre = ?, especie = ?, fecha_nacimiento = ?
+     SET id_dueno = ?, nombre = ?, especie = ?, fecha_nacimiento = ?, estado = ?
      WHERE id = ?`,
     [
       mascota.id_duenio,
       mascota.nombre,
       mascota.especie,
       mascota.fecha_nacimiento,
+      mascota.estado,
       id,
     ],
   );
@@ -65,7 +67,7 @@ export const updateMascota = async (
 
 export const deleteMascota = async (id: string): Promise<boolean> => {
   const [result] = await pool.query<ResultSetHeader>(
-    "DELETE FROM MASCOTAS WHERE id = ?",
+    "UPDATE MASCOTAS SET estado = 0 WHERE id = ?",
     [id],
   );
   return result.affectedRows > 0;

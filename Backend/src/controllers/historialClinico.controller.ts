@@ -36,7 +36,10 @@ export const getById = async (_req: Request, res: Response) => {
 //getByUserId
 export const getByUserId = async (req: Request, res: Response) => {
   try {
-    const userId = req.user!.id.toString(); // 👈 SALE DEL TOKEN
+    if (!req.user) {
+      return res.status(401).json({ message: "Usuario no autenticado." });
+    }
+    const userId = req.user.id?.toString() ?? "";
     const historialClinicoData =
       await historialClinicoService.getHistorialClinicoByUserId(userId);
 
@@ -56,7 +59,10 @@ export const getByUserId = async (req: Request, res: Response) => {
 //create()
 export const create = async (req: Request, res: Response) => {
   try {
-    const userId = req.user!.id.toString(); // 👈 SALE DEL TOKEN
+    if (!req.user) {
+      return res.status(401).json({ message: "Usuario no autenticado." });
+    }
+    const userId = req.user.id?.toString() ?? "";
     const historialClinicoData: IHistorialClinico = req.body;
 
     const historialClinicoCreated =

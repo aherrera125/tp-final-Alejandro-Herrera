@@ -28,12 +28,11 @@ export const findHistorialClinicoByUserId = async (
   userId: string,
 ): Promise<IHistorialClinico | null> => {
   const [rows] = await pool.query<HistorialClinicoRow[]>(
-    `SELECT ma.id, ma.nombre, ma.especie, ma.fecha_nacimiento, 
-     vt.id, vt.nombre, vt.apellido, vt.matricula, vt.especialidad
+    `SELECT ma.id, ma.nombre nom_mascota, ma.especie, ma.fecha_nacimiento, hc.fecha_registro, hc.descripcion,
+     us.nombre nom_vete, us.apellido ape_vete
      FROM historial_clinico hc 
-     INNER JOIN mascotas ma on ma.id = hc.id_mascota
-     INNER JOIN veterinarios ve ON ve.id = hc.id_veterinario 
-     INNER JOIN users us ON us.id = ve.user_id 
+     inner join users us on us.id = hc.id_user
+     INNER JOIN mascotas ma on ma.id = hc.id_mascota          
      WHERE us.id = ?`,
     [userId],
   );
@@ -42,21 +41,25 @@ export const findHistorialClinicoByUserId = async (
 
 export const createHistorialClinico = async (
   userId: string,
-  historialClinico: Omit<IHistorialClinico, "id" | "id_veterinario">,
+  historialClinico: Omit<IHistorialClinico, "id">,
 ): Promise<number> => {
-  const [veterinarioIdRows]: any = await pool.query(
-    `SELECT vt.id 
-     FROM veterinarios vt
-     INNER JOIN users us ON us.id = vt.user_id
-     WHERE us.id = ?`,
-    [userId],
+  const [historialIdRows]: any = await pool.query(
+    `INSERT INTO historial_clinico(id_mascota, fecha_registro, descripcion, status, id_user) 
+     VALUES (?,?,?,?,?)`,
+    [
+      historialClinico.id_mascota,
+      historialClinico.fecha_registro,
+      historialClinico.descripcion,
+      1, // status por defecto en true
+      userId,
+    ],
   );
 
-  if (!veterinarioIdRows || veterinarioIdRows.length === 0) {
-    throw new Error("Veterinario no encontrado para el usuario");
+  if (!historialIdRows || historialIdRows.length === 0) {
+    throw new Error("No se pudo crear el historial clínico");
   }
 
-  const veterinarioId = veterinarioIdRows[0].id;
+  const historialId = historialIdRows[0].insertId;
 
   if (!historialClinico.id_mascota || !historialClinico.descripcion) {
     throw new Error("Faltan datos obligatorios para crear historial clínico");
@@ -65,9 +68,9 @@ export const createHistorialClinico = async (
   const { id_mascota, descripcion } = historialClinico;
 
   const [historialClinicoResult] = await pool.query(
-    `INSERT INTO HISTORIAL_CLINICO (id_mascota, id_veterinario, descripcion) 
+    `INSERT INTO HISTORIAL_CLINICO (id_mascota, id_user, descripcion) 
      VALUES (?,?,?)`,
-    [id_mascota, veterinarioId, descripcion],
+    [id_mascota, userId, descripcion],
   );
   return (historialClinicoResult as any).insertId;
 };
@@ -78,15 +81,9 @@ export const updateHistorialClinico = async (
 ): Promise<IHistorialClinico | null> => {
   const [result] = await pool.query<ResultSetHeader>(
     `UPDATE HISTORIAL_CLINICO
-     SET id_mascota = ?, id_veterinario = ?, fecha_registro = ?, descripcion = ?
+     SET descripcion = ?
      WHERE id = ?`,
-    [
-      historialClinico.id_mascota,
-      historialClinico.id_veterinario,
-      historialClinico.fecha_registro,
-      historialClinico.descripcion,
-      id,
-    ],
+    [historialClinico.descripcion, id],
   );
 
   if (result.affectedRows === 0) {
@@ -104,7 +101,7 @@ export const updateHistorialClinico = async (
 
 export const deleteHistorialClinico = async (id: string): Promise<boolean> => {
   const [result] = await pool.query<ResultSetHeader>(
-    "DELETE FROM HISTORIAL_CLINICO WHERE id = ?",
+    "UPDATE HISTORIAL_CLINICO SET status = 0 WHERE id = ?",
     [id],
   );
   return result.affectedRows > 0;
