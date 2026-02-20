@@ -12,7 +12,7 @@ export const findAllDuenios = async (): Promise<IDuenio[]> => {
 
 export const findDuenio = async (id: string): Promise<IDuenio | null> => {
   const [rows] = await pool.query<DuenioRow[]>(
-    "SELECT * FROM DUENOS DU WHERE DU.id = ?",
+    "SELECT * FROM DUENOS WHERE id = ?",
     [id],
   );
   return rows.length ? rows[0] : null;
@@ -54,7 +54,7 @@ export const updateDuenio = async (
 
 export const deleteDuenio = async (id: string): Promise<boolean> => {
   const [result] = await pool.query<ResultSetHeader>(
-    "DELETE FROM DUENOS WHERE id = ?",
+    "UPDATE DUENOS SET estado = 0 WHERE id = ?",
     [id],
   );
   return result.affectedRows > 0;

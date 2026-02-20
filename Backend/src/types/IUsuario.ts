@@ -1,5 +1,5 @@
 export interface IUsuario {
-  id: number;
+  id?: number;
   username: string;
   email: string;
   password: string;
@@ -9,5 +9,6 @@ export interface IUsuario {
   apellido: string;
   especialidad: string;
   matricula: string;
-  //role: "user" | "admin";
+  status?: boolean;
+  role?: "user" | "admin";
 }

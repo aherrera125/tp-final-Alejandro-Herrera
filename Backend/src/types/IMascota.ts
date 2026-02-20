@@ -1,7 +1,8 @@
 export interface IMascota {
-  id: string;
+  id?: string;
+  id_duenio: string;
   nombre: string;
   especie: string;
   fecha_nacimiento?: Date;
-  id_duenio: string;
+  estado: boolean; // 1 para activo, 0 para inactivo
 }

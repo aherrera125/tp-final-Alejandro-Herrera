@@ -1,7 +1,8 @@
 export interface IDuenio {
-  id: string;
+  id?: string;
   nombre: string;
   apellido: string;
   telefono: string;
   direccion: string;
+  estado: boolean;
 }

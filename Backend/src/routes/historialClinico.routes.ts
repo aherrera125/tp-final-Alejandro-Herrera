@@ -10,16 +10,16 @@ router.get(
   historialClinicoController.getAll,
 );
 router.get(
-  "/:id",
-  authenticate,
-  authorize(["admin"]),
-  historialClinicoController.getById,
-);
-router.get(
   "/me",
   authenticate,
-  authorize(["user", "admin"]),
+  authorize(["user"]),
   historialClinicoController.getByUserId,
+);
+router.get(
+  "/:id",
+  authenticate,
+  authorize(["user"]),
+  historialClinicoController.getById,
 );
 router.post(
   "/",
@@ -30,7 +30,7 @@ router.post(
 router.put(
   "/:id",
   authenticate,
-  authorize(["user", "admin"]),
+  authorize(["user"]),
   historialClinicoController.update,
 );
 router.delete(

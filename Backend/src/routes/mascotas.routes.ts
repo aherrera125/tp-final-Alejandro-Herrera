@@ -13,7 +13,7 @@ router.get(
 router.get(
   "/:id",
   authenticate,
-  authorize(["user", "admin"]),
+  authorize(["user"]),
   mascotasController.getById,
 );
 router.post(

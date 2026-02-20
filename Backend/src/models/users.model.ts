@@ -18,12 +18,22 @@ export const findUserById = async (id: string): Promise<IUsuario | null> => {
   return rows.length ? rows[0] : null;
 };
 
+export const findUserByEmail = async (
+  email: string,
+): Promise<IUsuario | null> => {
+  const [rows] = await pool.query<UsuarioRow[]>(
+    "SELECT * FROM USERS WHERE email = ?",
+    [email],
+  );
+  return rows.length ? rows[0] : null;
+};
+
 export const createUser = async (
-  usuario: Omit<IUsuario, "id">,
+  usuario: Omit<IUsuario, "id" | "status">,
 ): Promise<number> => {
   const [usuarioResult] = await pool.query(
-    `INSERT INTO USERS (username, email, password, nombre, apellido, matricula, especialidad) 
-     VALUES (?,?,?,?,?,?,?)`,
+    `INSERT INTO USERS (username, email, password, nombre, apellido, matricula, especialidad, status) 
+     VALUES (?,?,?,?,?,?,?,?)`,
     [
       usuario.username,
       usuario.email,
@@ -32,6 +42,7 @@ export const createUser = async (
       usuario.apellido,
       usuario.matricula,
       usuario.especialidad,
+      1, // status por defecto activo
     ],
   );
   return (usuarioResult as any).insertId;
@@ -43,11 +54,12 @@ export const updateUser = async (
 ): Promise<IUsuario | null> => {
   const [result] = await pool.query<ResultSetHeader>(
     `UPDATE USERS
-     SET nombre = ?, apellido = ?, matricula = ?, especialidad = ?
+     SET nombre = ?, apellido = ?, email = ?, matricula = ?, especialidad = ?
      WHERE id = ?`,
     [
       usuario.nombre,
       usuario.apellido,
+      usuario.email,
       usuario.matricula,
       usuario.especialidad,
       id,
@@ -69,7 +81,9 @@ export const updateUser = async (
 
 export const deleteUser = async (id: string): Promise<boolean> => {
   const [result] = await pool.query<ResultSetHeader>(
-    "DELETE FROM USERS WHERE id = ?",
+    `UPDATE USERS
+     SET status = 0
+     WHERE id = ?`,
     [id],
   );
   return result.affectedRows > 0;

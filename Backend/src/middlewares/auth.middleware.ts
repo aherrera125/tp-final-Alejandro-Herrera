@@ -36,7 +36,7 @@ export const authenticate = (
  */
 export const authorize = (roles: Array<"user" | "admin">) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    if (!req.user || !roles.includes(req.user.role)) {
+    if (!req.user || !req.user.role || !roles.includes(req.user.role)) {
       return res.status(403).json({ message: "Acceso denegado" });
     }
     next();
