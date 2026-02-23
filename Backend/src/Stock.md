@@ -160,6 +160,13 @@ curl -sS -X PUT http://localhost:3000/api/historialClinico/5 \
 curl -sS -X DELETE http://localhost:3000/api/historialClinico/5 \
  -H "Authorization: Bearer TU_TOKEN_AQUI"
 
+# Obtener un historial clinico segun el usuario/veterinario logueado teniendo el token
+
+curl -X GET \
+ -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzcxODE3MTk0LCJleHAiOjE3NzE5MDM1OTQsImlzcyI6ImN1cnNvLXV0bi1iYWNrZW5kIn0.kZYzG4pemXM3q6tRPpFU5RerrrpgcA0ihuPNgeUTMUY" \
+ -H "Content-Type: application/json" \
+ http://localhost:3000/api/historialClinico/me
+
 # REGISTRACION Y AUTORIZACION
 
 # Registrar un usuario

@@ -26,17 +26,30 @@ export const findHistorialClinicoById = async (
 
 export const findHistorialClinicoByUserId = async (
   userId: string,
-): Promise<IHistorialClinico | null> => {
+): Promise<IHistorialClinico[]> => {
   const [rows] = await pool.query<HistorialClinicoRow[]>(
-    `SELECT ma.id, ma.nombre nom_mascota, ma.especie, ma.fecha_nacimiento, hc.fecha_registro, hc.descripcion,
-     us.nombre nom_vete, us.apellido ape_vete
+    `SELECT hc.id, 
+            hc.fecha_registro, 
+            hc.descripcion,
+            ma.id AS id_mascota,
+            ma.nombre AS nom_mascota, 
+            ma.especie,
+            ma.fecha_nacimiento,
+            d.id AS id_duenio,
+            d.nombre AS nom_duenio, 
+            d.apellido AS ape_duenio, 
+            d.telefono,
+            us.id AS id_veterinario,
+            us.nombre AS nom_vete, 
+            us.apellido AS ape_vete            
      FROM historial_clinico hc 
-     inner join users us on us.id = hc.id_user
-     INNER JOIN mascotas ma on ma.id = hc.id_mascota          
+     INNER JOIN users us ON us.id = hc.id_user
+     INNER JOIN mascotas ma ON ma.id = hc.id_mascota
+     INNER JOIN duenos d ON d.id = ma.id_dueno
      WHERE us.id = ?`,
     [userId],
   );
-  return rows.length ? rows[0] : null;
+  return rows;
 };
 
 export const createHistorialClinico = async (
