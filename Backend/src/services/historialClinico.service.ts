@@ -20,7 +20,7 @@ export const getHistorialClinicoById = async (
 
 export const getHistorialClinicoByUserId = async (
   userId: string,
-): Promise<IHistorialClinico | null> => {
+): Promise<IHistorialClinico[]> => {
   return await findHistorialClinicoByUserId(userId);
 };
 

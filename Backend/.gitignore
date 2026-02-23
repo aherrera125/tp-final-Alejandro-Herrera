@@ -41,6 +41,9 @@ build/Release
 node_modules/
 jspm_packages/
 
+# Frontend build / static files (temporal o prod)
+public/
+
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
 

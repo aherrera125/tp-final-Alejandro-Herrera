@@ -1,80 +1,127 @@
-let formData = document.getElementById("loginForm");
+let loginForm = document.getElementById("loginForm");
 
-formData.addEventListener("submit", function (e) {
-  e.preventDefault(); // Evita que el formulario se envíe de forma tradicional
-  let email = document.getElementById("email").value;
-  let password = document.getElementById("password").value;
+if (loginForm) {
+  loginForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
 
-  fetch("/auth/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      email: email, // luis.luna@patitasfelices.com
-      password: password, // SecurePass125!
-    }),
-  })
-    .then((res) => {
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      return res.json(); // normalmente devuelve { token: "..." }
+    fetch("http://localhost:3000/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email, // luis.luna@patitasfelices.com
+        password: password, // SecurePass125!
+      }),
     })
-    .then((data) => {
-      console.log("Token recibido:", data.token);
-      // ejemplo: guardarlo en localStorage para usar en otros endpoints
-      localStorage.setItem("token", data.token);
-      window.location.href = "/dashboard.html"; // redirige a la página principal después del login
-    })
-    .catch((err) => console.error("Error en login:", err));
-});
+      .then((res) => {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then((data) => {
+        console.log("Token recibido:", data.token);
+        localStorage.setItem("token", data.token);
 
-let mascotas = [];
-
-//function login() {}
-
-function logout() {
-  window.location.href = "../../index.html";
+        window.location.href = "/dashboard.html";
+      })
+      .catch((err) => console.error("Error en login:", err));
+  });
 }
 
-function agregarMascota() {
-  const mascota = document.getElementById("mascota").value.trim();
-  const duenio = document.getElementById("duenio").value.trim();
-  const vet = document.getElementById("vet").value.trim();
-  const historial = document.getElementById("historial").value.trim();
+let dashboardForm = document.getElementById("dashboardForm");
+if (dashboardForm) {
+  const token = localStorage.getItem("token");
+  //const token = localStorage.getItem("token")?.replace(/"/g, "");
+  console.log("Token en dashboard:", token);
 
-  if (!mascota || !duenio || !vet || !historial) {
-    alert("Por favor completá todos los campos");
-    return;
+  if (!token) {
+    console.log("No hay token, redirigiendo al login...");
+    window.location.href = "/index.html";
   }
 
-  mascotas.push({ mascota, duenio, vet, historial });
-  renderMascotas();
-  limpiarFormulario();
+  (async () => {
+    try {
+      const res = await fetch("http://localhost:3000/api/historialClinico/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-  const modal = bootstrap.Modal.getInstance(
-    document.getElementById("modalMascota"),
-  );
-  modal.hide();
-}
+      if (res.status === 403 || res.status === 401) {
+        console.error("Token no válido o sin permisos");
+        localStorage.removeItem("token");
+        window.location.href = "/index.html";
+        return;
+      }
 
-function limpiarFormulario() {
-  document.getElementById("mascota").value = "";
-  document.getElementById("duenio").value = "";
-  document.getElementById("vet").value = "";
-  document.getElementById("historial").value = "";
-}
+      const data = await res.json();
+      console.log("Datos del historial clínico:", data);
+      renderHistorias(data);
+    } catch (err) {
+      console.error("Error al obtener datos iniciales:", err);
+    }
+  })();
 
-function renderMascotas() {
-  const table = document.getElementById("mascotasTable");
-  table.innerHTML = "";
+  function renderHistorias(historiales) {
+    const table = document.getElementById("historialesTable");
+    table.innerHTML = "";
 
-  mascotas.forEach((m) => {
-    table.innerHTML += `
+    historiales.forEach((h) => {
+      table.innerHTML += `
       <tr>
-        <td>${m.mascota}</td>
-        <td>${m.duenio}</td>
-        <td>${m.vet}</td>
-        <td>${m.historial}</td>
+        <td>${h.mascota}</td>
+        <td>${h.duenio}</td>
+        <td>${h.vet}</td>
+        <td>${h.historial}</td>
       </tr>`;
+    });
+  }
+
+  dashboardForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const button = e.submitter;
+
+    if (button.id === "logoutButton") {
+      logout();
+    }
+
+    function logout() {
+      localStorage.removeItem("token");
+      window.location.href = "/index.html";
+    }
+
+    if (button.id === "addHistorialButton") {
+      agregarHistorial();
+    }
+
+    function agregarHistorial() {
+      const mascota = document.getElementById("mascota").value.trim();
+      const duenio = document.getElementById("duenio").value.trim();
+      const vet = document.getElementById("vet").value.trim();
+      const historial = document.getElementById("historial").value.trim();
+
+      if (!mascota || !duenio || !vet || !historial) {
+        alert("Por favor completá todos los campos");
+        return;
+      }
+
+      let historiales = [];
+      historiales.push({ mascota, duenio, vet, historial });
+      renderHistorias(historiales);
+      limpiarFormulario();
+
+      const modal = bootstrap.Modal.getInstance(
+        document.getElementById("modalMascota"),
+      );
+      modal.hide();
+    }
+
+    function limpiarFormulario() {
+      document.getElementById("mascota").value = "";
+      document.getElementById("duenio").value = "";
+      document.getElementById("vet").value = "";
+      document.getElementById("historial").value = "";
+    }
   });
 }

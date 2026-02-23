@@ -2,7 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { JwtPayload } from "../types/auth";
 
-const JWT_SECRET = process.env.JWT_SECRET as string;
+//const JWT_SECRET = process.env.JWT_SECRET as string;
+const JWT_SECRET = "clave123";
 
 /**
  * Middleware de autenticación
@@ -14,7 +15,7 @@ export const authenticate = (
   res: Response,
   next: NextFunction,
 ) => {
-  const token = req.headers.authorization?.split(" ")[1]; // Bearer <token>
+  const token = req.headers.authorization?.split(" ")[1];
 
   if (!token) {
     return res.status(401).json({ message: "No token provided" });
@@ -24,7 +25,17 @@ export const authenticate = (
     if (err) {
       return res.status(403).json({ message: "Invalid token or expired" });
     }
-    req.user = decoded as JwtPayload;
+
+    req.user = decoded as JwtPayload; // Ahora req.user tendrá el .role
+  });
+};
+
+/**
+ * Middleware de autorización
+ *
+      id: payload.id,
+      role: payload.role,
+    };
     next();
   });
 };
