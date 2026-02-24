@@ -1,134 +1,181 @@
 :root {
-  --bg-dark: #121212;
-  --bg-card: #1e1e1e;
-  --accent: #ff9f43;
-  --text-main: #ffffff;
-  --text-muted: #b3b3b3;
+  --bg-deep: #0f172a;
+  --primary-teal: #2dd4bf;
+  --secondary-slate: #334155;
+  --text-light: #f8fafc;
+  --text-muted: #94a3b8;
+  --glass-bg: rgba(30, 41, 59, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --shadow-premium: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  background-color: var(--bg-dark);
-  color: var(--text-main);
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    sans-serif;
+  background-color: var(--bg-deep);
+  background-image:
+    radial-gradient(at 0% 0%, rgba(45, 212, 191, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(51, 65, 85, 0.2) 0px, transparent 50%);
+  background-attachment: fixed;
   min-height: 100vh;
-  display: block;
-  font-family: "Segoe UI", Roboto, sans-serif;
+  margin: 0;
+  color: var(--text-light);
+  display: flex;
+  flex-direction: column;
 }
 
-/* --- Estructura Responsive --- */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 20px;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-premium);
+  padding: 2.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auth-container {
+  max-width: 440px;
+  width: 90%;
+  margin: auto;
+}
 
 .dashboard-container {
-  padding: 1rem; /* Menos espacio en móviles */
-  max-width: 1400px;
-  margin: 0 auto;
+  padding: 2rem;
+  flex-grow: 1;
 }
 
-/* Escritorio (Pantallas grandes) */
-@media (min-width: 992px) {
-  .dashboard-container {
-    padding: 2rem;
-  }
+.hidden {
+  display: none !important;
 }
 
-/* --- Navbar --- */
-.navbar {
-  background-color: var(--bg-card) !important;
-  border-bottom: 1px solid #333;
-  padding: 0.8rem 1rem;
-}
-
-@media (min-width: 768px) {
-  .navbar {
-    padding: 1rem 2rem;
-  }
-}
-
-.navbar-brand {
-  font-weight: bold;
-  color: var(--accent) !important;
-  font-size: 1.2rem;
-}
-
-/* --- Tabla y Contenedor (Manejo de Responsive) --- */
-.table-container {
-  background-color: var(--bg-card);
-  border-radius: 12px;
-  padding: 1rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  margin-top: 1rem;
-  /* Esto permite que la tabla haga scroll lateral en móviles */
-  overflow-x: auto;
-}
-
-@media (min-width: 768px) {
-  .table-container {
-    padding: 1.5rem;
-    margin-top: 1.5rem;
-  }
-}
-
+/* Custom Table Styles for Dark Theme */
 .table {
-  color: var(--text-main);
-  margin-bottom: 0;
-  min-width: 600px; /* Asegura que la tabla no se colapse en móviles */
+  color: var(--text-light);
 }
 
-@media (min-width: 992px) {
-  .table {
-    min-width: 100%; /* En escritorio usa todo el ancho */
-  }
+.table-hover tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--text-light);
 }
 
 .table thead th {
-  border-bottom: 2px solid var(--accent);
-  color: var(--text-muted);
+  background-color: rgba(0, 0, 0, 0.2);
+  border-bottom: 2px solid var(--glass-border);
+  color: var(--primary-teal);
   text-transform: uppercase;
-  font-size: 0.75rem;
-  letter-spacing: 1px;
-  white-space: nowrap;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
 }
 
-/* --- Botones y Títulos --- */
-h2,
-h4 {
-  font-size: 1.4rem;
+.table td {
+  border-bottom: 1px solid var(--glass-border);
 }
 
-@media (max-width: 576px) {
-  .d-flex.justify-content-between {
-    flex-direction: column; /* Apila título y botón en celulares muy pequeños */
-    gap: 1rem;
-  }
-
-  .btn-accent {
-    width: 100%; /* Botón ancho completo en móvil */
-  }
-}
-
-.btn-accent {
-  background-color: var(--accent);
-  color: #000;
-  font-weight: 600;
-  border: none;
-  transition: transform 0.2s;
-}
-
-.btn-accent:hover {
-  background-color: #e68a2e;
-  transform: translateY(-2px);
-}
-
-/* --- Formulario y Modales --- */
-.form-control {
-  background-color: #968787;
-  border: 1px solid #444;
-  color: white;
+/* Form Controls Dark Mode */
+.form-control,
+.form-select {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  color: var(--text-light);
+  border-radius: 10px;
 }
 
 .form-control:focus {
-  background-color: #333;
-  color: white;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 0.25rem rgba(255, 159, 67, 0.25);
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--primary-teal);
+  color: var(--text-light);
+  box-shadow: 0 0 0 0.25rem rgba(45, 212, 191, 0.25);
+}
+
+.form-label {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Buttons */
+.btn-primary.btn-premium {
+  background-color: var(--primary-teal);
+  border: none;
+  color: var(--bg-deep);
+  font-weight: 700;
+}
+
+.btn-primary.btn-premium:hover {
+  background-color: #2ed6c1;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(45, 212, 191, 0.3);
+}
+
+.btn-outline-danger {
+  color: #f87171;
+  border-color: #f87171;
+}
+
+.btn-outline-danger:hover {
+  background-color: #f87171;
+  color: var(--text-light);
+}
+
+.btn-outline-primary {
+  color: var(--primary-teal);
+  border-color: var(--primary-teal);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary-teal);
+  color: var(--bg-deep);
+}
+
+/* Navbar */
+.navbar-vet {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.navbar-brand {
+  color: var(--primary-teal) !important;
+}
+
+/* Modal adjustments */
+.modal-content.glass-card {
+  background: var(--bg-deep);
+}
+
+.modal-header .btn-close {
+  filter: invert(1);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--secondary-slate);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-teal);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1rem;
+  }
+
+  .glass-card {
+    padding: 1.5rem;
+  }
 }

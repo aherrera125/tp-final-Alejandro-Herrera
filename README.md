@@ -5,6 +5,28 @@ Sistema de gestión para una veterinaria que permite administrar dueños, mascot
 
 ---
 
+## 📋 Tabla de Contenidos
+
+- [Descripción General](#-descripción-general)
+- [Arquitectura](#️-arquitectura)
+- [Esquema de Base de Datos](#️-esquema-de-base-de-datos)
+- [Tecnologías Utilizadas](#-tecnologías-utilizadas)
+- [Requisitos del Sistema](#-requisitos-del-sistema)
+- [Instalación y Configuración](#️-instalación-y-configuración)
+- [API Endpoints](#-api-endpoints)
+- [Funcionalidades](#-funcionalidades)
+- [Capturas de Pantalla](#-capturas-de-pantalla)
+- [Uso del Sistema](#-uso-del-sistema)
+- [Testing](#-testing)
+- [Scripts Disponibles](#-scripts-disponibles)
+- [Seguridad](#-seguridad)
+- [Contribuciones](#-contribuciones)
+- [Contacto](#-contacto)
+- [Licencia](#-licencia)
+- [Despliegue](#-despliegue)
+
+---
+
 ## 📋 Descripción General
 
 Este proyecto consta de dos partes principales:
@@ -49,7 +71,27 @@ TP-FINAL-ALEJANDRO-HERRERA/
 
 ---
 
-## 🚀 Tecnologías Utilizadas
+## 🗄️ Esquema de Base de Datos
+
+La base de datos `veterinaria_patitas_felices` consta de las siguientes tablas principales:
+
+- **users**: Gestión de usuarios del sistema (veterinarios/administradores). El rol de cada usuario se gestiona mediante `roles` y `user_roles`.
+- **roles**: Lista de roles disponibles (por ejemplo `admin`, `user`).
+- **user_roles**: Asociación entre usuarios y roles; permite asignar roles a los usuarios.
+- **duenos**: Información de los dueños de mascotas
+- **mascotas**: Datos de las mascotas registradas
+- **historial_clinico**: Registros médicos y tratamientos de las mascotas
+
+Relaciones:
+
+- Un dueño puede tener múltiples mascotas
+- Una mascota pertenece a un dueño
+- Una mascota puede tener múltiples registros en el historial clínico
+- Los veterinarios (usuarios) pueden atender múltiples mascotas
+
+---
+
+## �🚀 Tecnologías Utilizadas
 
 ### Backend
 
@@ -167,7 +209,7 @@ El frontend estará disponible en `http://localhost:5173` (puerto por defecto de
 
 - `GET|POST|PUT|DELETE /api/duenios` - Gestión de dueños
 - `GET|POST|PUT|DELETE /api/mascotas` - Gestión de mascotas
-- `GET|POST|PUT|DELETE /api/veterinarios` - Gestión de veterinarios
+- `GET|POST|PUT|DELETE /api/users` - Gestión de usuarios/veterinarios
 - `GET|POST|PUT|DELETE /api/historialClinico` - Gestión de historial clínico
 
 **Header requerido para endpoints protegidos:**
@@ -175,6 +217,11 @@ El frontend estará disponible en `http://localhost:5173` (puerto por defecto de
 ```
 Authorization: Bearer <token>
 ```
+
+Nota sobre tokens y roles:
+
+- El token JWT incluye en el payload `id` y `role` (por ejemplo `{"id":5,"role":"user",...}`).
+- Los middlewares de autorización esperan `role` presente en el token; si tu token es antiguo y no contiene `role`, deberás volver a iniciar sesión para obtener un token actualizado.
 
 ---
 
@@ -199,14 +246,19 @@ Authorization: Bearer <token>
 
 ---
 
-## 🔍 Uso del Sistema
+## � Capturas de Pantalla
+
+_Agregar capturas de pantalla del sistema aquí cuando estén disponibles._
+
+---
+
+## �🔍 Uso del Sistema
 
 1. **Iniciar Backend**: Ejecutar `npm run dev` en `Backend/`
 2. **Iniciar Frontend**: Ejecutar `npm run dev` en `Frontend/`
 3. **Acceder**: Abrir `http://localhost:5173` en el navegador
-4. **Login**: Usar credenciales de ejemplo o registrar nuevo usuario
-   email: luis.luna@patitasfelices.com
-   password: SecurePass125!
+4. **Login**: Usar credenciales de ejemplo (si se importó el SQL de ejemplo) o registrar nuevo usuario.
+   - Nota: las cuentas semilla están en `veterinaria_patitas_felices.sql`. Si no conoces la contraseña de una cuenta de ejemplo, registra un nuevo usuario o restablece la contraseña en la base de datos.
 5. **Gestionar**: Usar el dashboard para administrar mascotas y ver historial
 
 ---
@@ -275,6 +327,26 @@ Para dudas o sugerencias, abrir issue en el repositorio.
 ## 📄 Licencia
 
 Este proyecto está bajo la Licencia ISC.
+
+---
+
+## 🚀 Despliegue
+
+### Producción
+
+1. **Backend**: Configurar variables de entorno en servidor de producción
+2. **Base de Datos**: Usar MySQL en la nube (AWS RDS, Google Cloud SQL, etc.)
+3. **Frontend**: Desplegar en servicios como Vercel, Netlify o servidor web
+4. **Docker**: Usar contenedores para facilitar el despliegue
+
+### Mejoras Futuras
+
+- [ ] Implementar tests automatizados
+- [ ] Agregar notificaciones por email
+- [ ] Dashboard con estadísticas y gráficos
+- [ ] API de pagos para servicios veterinarios
+- [ ] Aplicación móvil complementaria
+- [ ] Integración con calendarios para citas
 
 ---
 

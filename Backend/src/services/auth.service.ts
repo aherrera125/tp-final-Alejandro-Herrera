@@ -30,7 +30,7 @@ export const register = async (
     especialidad,
   });
 
-  //const UserRoleId = await userModel.createUserRole(userId, 2); // 2 = role "user"
+  const UserRoleId = await userModel.createUserRole(userId, 2); // 2 = role "user"
 
   return userId;
 };

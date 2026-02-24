@@ -22,14 +22,18 @@ export const findUserByEmail = async (
   email: string,
 ): Promise<IUsuario | null> => {
   const [rows] = await pool.query<UsuarioRow[]>(
-    "SELECT * FROM USERS WHERE email = ?",
+    `SELECT u.*, r.name as role 
+     FROM users u 
+     JOIN user_roles ur ON u.id = ur.user_id 
+     JOIN roles r ON ur.role_id = r.id 
+     WHERE u.email = ?`,
     [email],
   );
   return rows.length ? rows[0] : null;
 };
 
 export const createUser = async (
-  usuario: Omit<IUsuario, "id" | "status">,
+  usuario: Omit<IUsuario, "id" | "status" | "role">,
 ): Promise<number> => {
   const [usuarioResult] = await pool.query(
     `INSERT INTO USERS (username, email, password, nombre, apellido, matricula, especialidad, status) 
@@ -87,4 +91,14 @@ export const deleteUser = async (id: string): Promise<boolean> => {
     [id],
   );
   return result.affectedRows > 0;
+};
+
+export const createUserRole = async (
+  userId: number,
+  roleId: number,
+): Promise<void> => {
+  await pool.query(`INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)`, [
+    userId,
+    roleId,
+  ]);
 };
