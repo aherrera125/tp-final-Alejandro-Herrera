@@ -71,6 +71,6 @@ export const login = async (
    * Generación del token JWT
    * Se firma el payload con el secreto y las opciones definidas
    */
-  //return jwt.sign(payload, secretKey, options);
-  return jwt.sign(payload, "clave123", options);
+  return jwt.sign(payload, secretKey, options);
+  //return jwt.sign(payload, "clave123", options);
 };

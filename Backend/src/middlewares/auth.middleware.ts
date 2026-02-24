@@ -2,8 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { JwtPayload } from "../types/auth";
 
-//const JWT_SECRET = process.env.JWT_SECRET as string;
-const JWT_SECRET = "clave123";
+const JWT_SECRET = process.env.JWT_SECRET as string;
+//const JWT_SECRET = "clave123";
 
 /**
  * Middleware de autenticación
@@ -15,6 +15,8 @@ export const authenticate = (
   res: Response,
   next: NextFunction,
 ) => {
+  console.log("🟢 authenticate - headers:", req.headers.authorization);
+
   const token = req.headers.authorization?.split(" ")[1];
 
   if (!token) {
@@ -26,7 +28,8 @@ export const authenticate = (
       return res.status(403).json({ message: "Invalid token or expired" });
     }
 
-    req.user = decoded as JwtPayload; // Ahora req.user tendrá el .role
+    req.user = decoded as JwtPayload;
+    next();
   });
 };
 
@@ -47,6 +50,7 @@ export const authenticate = (
  */
 export const authorize = (roles: Array<"user" | "admin">) => {
   return (req: Request, res: Response, next: NextFunction) => {
+    console.log("🟢 authorize - user:", req.user);
     if (!req.user || !req.user.role || !roles.includes(req.user.role)) {
       return res.status(403).json({ message: "Acceso denegado" });
     }

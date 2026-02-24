@@ -21,6 +21,7 @@ export const getHistorialClinicoById = async (
 export const getHistorialClinicoByUserId = async (
   userId: string,
 ): Promise<IHistorialClinico[]> => {
+  console.log("Buscando historial clínico para el usuario con ID:", userId);
   return await findHistorialClinicoByUserId(userId);
 };
 
