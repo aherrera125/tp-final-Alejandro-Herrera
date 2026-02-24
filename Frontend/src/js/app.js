@@ -41,28 +41,54 @@ if (dashboardForm) {
     window.location.href = "/index.html";
   }
 
-  (async () => {
-    try {
-      const res = await fetch("http://localhost:3000/api/historialClinico/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (res.status === 403 || res.status === 401) {
+  fetch("http://localhost:3000/api/historialClinico/me", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => {
+      if (res.status === 401 || res.status === 403) {
         console.error("Token no válido o sin permisos");
         localStorage.removeItem("token");
         window.location.href = "/index.html";
-        return;
+        throw new Error("No autorizado");
       }
 
-      const data = await res.json();
+      if (!res.ok) {
+        throw new Error("Error HTTP " + res.status);
+      }
+
+      return res.json();
+    })
+    .then((data) => {
       console.log("Datos del historial clínico:", data);
       renderHistorias(data);
-    } catch (err) {
-      console.error("Error al obtener datos iniciales:", err);
-    }
-  })();
+    })
+    .catch((err) => {
+      console.error("Error en fetch:", err);
+    });
+
+  /*fetch("http://localhost:3000/api/historialClinico/me", {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+    .then((res) => {
+      //if (!res.ok) throw new Error("HTTP " + res.status);
+      if (!res.ok || res.status === 403 || res.status === 401) {
+        console.error("Token no válido o sin permisos");
+        localStorage.removeItem("token");
+        window.location.href = "/index.html";
+        return res.json();
+      }
+    })
+    .then((data) => {
+      //console.log("Nombre:", data.name, "ID:", data.id);
+      console.log("Datos del historial clínico:", data);
+      renderHistorias(data);
+    })
+    .catch((err) => console.error("Error en fetch:", err));*/
 
   function renderHistorias(historiales) {
+    console.log("Renderizando historiales:", historiales);
     const table = document.getElementById("historialesTable");
     table.innerHTML = "";
 
