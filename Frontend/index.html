@@ -2,39 +2,57 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <title>Patitas Felices | Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Patitas Felices - Login</title>
+    <!-- Bootstrap 5 CSS -->
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./src/css/style.css" />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
-  <body class="bg-main d-flex justify-content-center align-items-center vh-100">
-    <div class="card login-card p-4">
-      <h3 class="text-center mb-4 text-accent">🐾 Patitas Felices 🐾</h3>
 
-      <form id="loginForm">
-        <input
-          id="email"
-          type="text"
-          class="form-control mb-3"
-          placeholder="Usuario"
-        />
-        <input
-          id="password"
-          type="password"
-          class="form-control mb-3"
-          placeholder="Contraseña"
-        />
-
-        <button type="submit" class="btn btn-accent w-100">Ingresar</button>
-
-        <p id="registerLink" class="text-center mt-3 small">
-          ¿No tenés cuenta? <a href="#" class="text-accent">Registrarse</a>
-        </p>
-      </form>
+  <body class="d-flex align-items-center justify-content-center">
+    <!-- Login Screen -->
+    <div id="login-screen" class="container auth-container">
+      <div class="glass-card text-center">
+        <h2 class="mb-4">🐾 Patitas Felices 🐾</h2>
+        <p class="text-muted mb-4">Ingrese sus credenciales</p>
+        <form id="login-form">
+          <div class="mb-3 text-start">
+            <label class="form-label">Email</label>
+            <input
+              type="email"
+              id="email"
+              class="form-control"
+              placeholder="luis.luna@patitasfelices.com"
+              required
+            />
+          </div>
+          <div class="mb-3 text-start">
+            <label class="form-label">Contraseña</label>
+            <input
+              type="password"
+              id="password"
+              class="form-control"
+              placeholder="SecurePass125!"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-primary btn-premium w-100 mt-3">
+            Ingresar
+          </button>
+        </form>
+        <div id="error-msg" class="text-danger mt-3 small"></div>
+      </div>
     </div>
 
-    <script type="module" src="./src/js/app.js"></script>
+    <!-- Main Logic -->
+    <script src="./src/js/app.js"></script>
   </body>
 </html>

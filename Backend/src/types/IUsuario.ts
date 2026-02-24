@@ -10,5 +10,5 @@ export interface IUsuario {
   especialidad: string;
   matricula: string;
   status?: boolean;
-  role?: "user" | "admin";
+  role: "user" | "admin";
 }

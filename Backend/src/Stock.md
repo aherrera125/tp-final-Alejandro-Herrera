@@ -1,245 +1,246 @@
-# DUENIOS
+# Colección de curls para endpoints del backend
 
-# Obtener todos
+Variable de entorno recomendada para usar en comandos (Linux/macOS/Git Bash/WSL):
 
-curl -X GET http://localhost:3000/api/duenios -H "Authorization: Bearer TU_TOKEN_AQUI"
+```bash
+export TOKEN="TU_TOKEN_AQUI"
+```
 
-# Obtener por id
+En Windows PowerShell:
 
-curl -X GET http://localhost:3000/api/duenios/1 -H "Authorization: Bearer TU_TOKEN_AQUI"
+```powershell
+$env:TOKEN = "TU_TOKEN_AQUI"
+```
 
-# Crear dueño pasando token de usuario logueado
+Todas las solicitudes protegidas usan el header:
 
-curl -X POST http://localhost:3000/api/duenios \
- -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwicm9sZSI6InVzZXIiLCJpYXQiOjE3NzEzNTE3MjAsImV4cCI6MTc3MTQzODEyMCwiaXNzIjoiY3Vyc28tdXRuLWJhY2tlbmQifQ.0EnWr171C_ju8TBgqb7sVzNkBid74C8fNeBNTrQjEJA" \
- -H "Content-Type: application/json" \
- -d '{
-"nombre": "Julio",
-"apellido": "Perez",
-"telefono": 123456789,
-"direccion": "Calle Falsa 123"
-}'
+```
+Authorization: Bearer $TOKEN
+```
 
-# Actualizar un dueño
+## DUEÑOS
 
-curl -X PUT http://localhost:3000/api/duenios/8 \
- -H "Authorization: Bearer TU_TOKEN_AQUI" \
- -H "Content-Type: application/json" \
- -d '{
-"nombre": "Juan",
-"apellido": "Gomez",
-"telefono": 987654321,
-"direccion": "Av. Siempreviva 742"
-}'
+Obtener todos
 
-# Eliminar un dueño
+```bash
+curl -sS -X GET http://localhost:3000/api/duenios \
+  -H "Authorization: Bearer $TOKEN"
+```
 
-curl -X DELETE http://localhost:3000/api/duenios/8 \
- -H "Authorization: Bearer TU_TOKEN_AQUI"
+Obtener por id
 
-# MASCOTAS
+```bash
+curl -sS -X GET http://localhost:3000/api/duenios/1 \
+  -H "Authorization: Bearer $TOKEN"
+```
 
-# Obtener todas
+Crear dueño (POST)
 
-curl -sS http://localhost:3000/api/mascotas \
- -H "Authorization: Bearer TU_TOKEN_AQUI"
+```bash
+curl -sS -X POST http://localhost:3000/api/duenios \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "nombre": "Julio",
+    "apellido": "Perez",
+    "telefono": "123456789",
+    "direccion": "Calle Falsa 123"
+  }'
+```
 
-# Obtener por id
+Actualizar un dueño (PUT)
 
-curl -sS http://localhost:3000/api/mascotas/1 \
- -H "Authorization: Bearer TU_TOKEN_AQUI"
+```bash
+curl -sS -X PUT http://localhost:3000/api/duenios/8 \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "nombre": "Juan",
+    "apellido": "Gomez",
+    "telefono": "987654321",
+    "direccion": "Av. Siempreviva 742"
+  }'
+```
 
-# Crear una mascota
+Eliminar un dueño (DELETE)
 
+```bash
+curl -sS -X DELETE http://localhost:3000/api/duenios/8 \
+  -H "Authorization: Bearer $TOKEN"
+```
+
+## MASCOTAS
+
+Obtener todas
+
+```bash
+curl -sS -X GET http://localhost:3000/api/mascotas \
+  -H "Authorization: Bearer $TOKEN"
+```
+
+Obtener por id
+
+```bash
+curl -sS -X GET http://localhost:3000/api/mascotas/1 \
+  -H "Authorization: Bearer $TOKEN"
+```
+
+Crear una mascota
+
+```bash
 curl -sS -X POST http://localhost:3000/api/mascotas \
- -H "Authorization: Bearer TU_TOKEN_AQUI" \
- -H "Content-Type: application/json" \
- -d '{
-"nombre": "Fido",
-"especie": "Perro",
-"fecha_nacimiento": "2020-05-01",
-"id_duenio": "2"
-}'
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "nombre": "Fido",
+    "especie": "Perro",
+    "fecha_nacimiento": "2020-05-01",
+    "id_duenio": 2
+  }'
+```
 
-# Actualizar una mascota
+Actualizar una mascota
 
+```bash
 curl -sS -X PUT http://localhost:3000/api/mascotas/5 \
- -H "Authorization: Bearer TU_TOKEN_AQUI" \
- -H "Content-Type: application/json" \
- -d '{
-"nombre": "Fido Actualizado",
-"especie": "Perro",
-"fecha_nacimiento": "2020-05-01",
-"id_duenio": "2"
-}'
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "nombre": "Fido Actualizado",
+    "especie": "Perro",
+    "fecha_nacimiento": "2020-05-01",
+    "id_duenio": 2
+  }'
+```
 
-# Eliminar una mascota
+Eliminar una mascota
 
+```bash
 curl -sS -X DELETE http://localhost:3000/api/mascotas/5 \
- -H "Authorization: Bearer TU_TOKEN_AQUI"
+  -H "Authorization: Bearer $TOKEN"
+```
 
-# VETERINARIOS
+## USUARIOS (VETERINARIOS)
 
-# Obtener todos
+Las rutas de usuarios están expuestas en `/api/users`.
 
-curl -sS http://localhost:3000/api/veterinarios \
- -H "Authorization: Bearer TU_TOKEN_AQUI"
+Obtener todos (requiere autorización `user`)
 
-# Obtener por id
+```bash
+curl -sS -X GET http://localhost:3000/api/users \
+  -H "Authorization: Bearer $TOKEN"
+```
 
-curl -sS http://localhost:3000/api/veterinarios/1 \
- -H "Authorization: Bearer TU_TOKEN_AQUI"
+Obtener datos del usuario autenticado
 
-# Crear un veterinario
+```bash
+curl -sS -X GET http://localhost:3000/api/users/me \
+  -H "Authorization: Bearer $TOKEN"
+```
 
-curl -sS -X POST http://localhost:3000/api/veterinarios \
- -H "Authorization: Bearer TU_TOKEN_AQUI" \
- -H "Content-Type: application/json" \
- -d '{
-"nombre": "María",
-"apellido": "Perez",
-"matricula": "MAT-123",
-"especialidad": "Dermatología"
-}'
+Crear usuario (protegido según roles)
 
-# Actualizar un Veterinario
+```bash
+curl -sS -X POST http://localhost:3000/api/users \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "nuevo",
+    "email": "nuevo@example.com",
+    "password": "Password123!",
+    "nombre": "Nombre",
+    "apellido": "Apellido",
+    "matricula": "MAT-001",
+    "especialidad": "Clinico"
+  }'
+```
 
-curl -sS -X PUT http://localhost:3000/api/veterinarios/5 \
- -H "Authorization: Bearer TU_TOKEN_AQUI" \
- -H "Content-Type: application/json" \
- -d '{
-"nombre": "María",
-"apellido": "González",
-"matricula": "MAT-123",
-"especialidad": "Cirugía"
-}'
+## HISTORIAL CLÍNICO
 
-# Eliminar un veterinario
+Obtener todos (requiere rol `admin`)
 
-curl -sS -X DELETE http://localhost:3000/api/veterinarios/5 \
- -H "Authorization: Bearer TU_TOKEN_AQUI"
+```bash
+curl -sS -X GET http://localhost:3000/api/historialClinico \
+  -H "Authorization: Bearer $TOKEN"
+```
 
-# HISTORIAL CLINICO
+Obtener historial del usuario autenticado
 
-# Obtener todos
+```bash
+curl -sS -X GET http://localhost:3000/api/historialClinico/me \
+  -H "Authorization: Bearer $TOKEN"
+```
 
-curl -sS http://localhost:3000/api/historialClinico \
- -H "Authorization: Bearer TU_TOKEN_AQUI"
+Obtener por id
 
-# Obtener por id
+```bash
+curl -sS -X GET http://localhost:3000/api/historialClinico/1 \
+  -H "Authorization: Bearer $TOKEN"
+```
 
-curl -sS http://localhost:3000/api/historialClinico/1 \
- -H "Authorization: Bearer TU_TOKEN_AQUI"
+Crear historial clínico (user|admin)
 
-# Crear un historial clinico
-
+```bash
 curl -sS -X POST http://localhost:3000/api/historialClinico \
- -H "Authorization: Bearer TU_TOKEN_AQUI" \
- -H "Content-Type: application/json" \
- -d '{
-"id_mascota": "3",
-"id_veterinario": "2",
-"fecha_registro": "2024-02-01",
-"descripcion": "Chequeo anual: todo ok"
-}'
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "id_mascota": 3,
+    "descripcion": "Chequeo anual: todo ok"
+  }'
+```
 
-# Actualizar un historial clinico
+Actualizar historial clínico (user)
 
+```bash
 curl -sS -X PUT http://localhost:3000/api/historialClinico/5 \
- -H "Authorization: Bearer TU_TOKEN_AQUI" \
- -H "Content-Type: application/json" \
- -d '{
-"id_mascota": "3",
-"id_veterinario": "2",
-"fecha_registro": "2024-02-02",
-"descripcion": "Tratamiento completado"
-}'
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "id_mascota": 3,
+    "descripcion": "Tratamiento completado"
+  }'
+```
 
-# Eliminar un historial clinico
+Eliminar historial clínico (user|admin)
 
+```bash
 curl -sS -X DELETE http://localhost:3000/api/historialClinico/5 \
- -H "Authorization: Bearer TU_TOKEN_AQUI"
+  -H "Authorization: Bearer $TOKEN"
+```
 
-# Obtener un historial clinico segun el usuario/veterinario logueado teniendo el token
+## AUTENTICACIÓN
 
-curl -X GET \
- -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzcxODcwMzQ4LCJleHAiOjE3NzE5NTY3NDgsImlzcyI6ImN1cnNvLXV0bi1iYWNrZW5kIn0.6hUXvxou5qgdsTA6bV_TlZ3CjJLF9qcYXQG8hVkipNM" \
- -H "Content-Type: application/json" \
- http://localhost:3000/api/historialClinico/me
+Registrar un usuario (route: `/auth/register`)
 
-# REGISTRACION Y AUTORIZACION
+```bash
+curl -sS -X POST http://localhost:3000/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "lluna",
+    "email": "luis.luna@patitasfelices.com",
+    "password": "SecurePass125!",
+    "nombre": "Luis",
+    "apellido": "Luna",
+    "matricula": "qwe113",
+    "especialidad": "Clinico"
+  }'
+```
 
-# Registrar un usuario
+Iniciar sesión (route: `/auth/login`). La respuesta contiene el token JWT.
 
-curl -X POST http://localhost:3000/auth/register \
- -H "Content-Type: application/json" \
- -d '{
-"email": "test@example.com",
-"password": "Password123!",
-"username": "testuser"
-}'
+```bash
+curl -sS -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "luis.luna@patitasfelices.com",
+    "password": "SecurePass125!"
+  }'
+```
 
-# Iniciar sesión
+Ejemplo de uso: copiar el token de la respuesta y exportarlo como `TOKEN` antes de las llamadas protegidas.
 
-curl -X POST http://localhost:3000/auth/login \
- -H "Content-Type: application/json" \
- -d '{
-"email": "test@example.com",
-"password": "Password123!"
-}'
-
-# Acceder a ruta protegida (reemplazar <token> con el token recibido)
-
-curl -X GET http://localhost:3000/protected \
- -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6InVzZXIiLCJpYXQiOjE3Njk5OTA5MDksImV4cCI6MTc3MDA3NzMwOSwiaXNzIjoiY3Vyc28tdXRuLWJhY2tlbmQifQ.4AK6GCFRmi5hx9h9kSCfs4XxHegcsPoejbJRqihg5xk"
-
-# Acceder a ruta de admin (reemplazar <token> con el token recibido)
-
-curl -X GET http://localhost:3000/admin \
- -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6InVzZXIiLCJpYXQiOjE3Njk5OTA5MDksImV4cCI6MTc3MDA3NzMwOSwiaXNzIjoiY3Vyc28tdXRuLWJhY2tlbmQifQ.4AK6GCFRmi5hx9h9kSCfs4XxHegcsPoejbJRqihg5xk"
-
-# USUARIOS
-
-# Crear un usuario nuevo (Register)
-
-curl -X POST http://localhost:3000/api/user/register \
- -H "Content-Type: application/json" \
- -d '{
-"username": "lluna",
-"email": "luis.luna@patitasfelices.com",
-"password": "SecurePass125!",
-"nombre": "Luis",
-"apellido": "Luna",
-"matricula": "qwe113",
-"especialidad": "Clinico"
-}'
-
-# LOGIN
-
-# Ingresar con mail y pass (Login)
-
-curl -X POST http://localhost:3000/api/user/login \
- -H "Content-Type: application/json" \
- -d '{
-"email": "luis.luna@patitasfelices.com",
-"password": "SecurePass125!"
-}'
-
-# Obtener los datos del usuario logueado en base al token
-
-curl -X GET http://localhost:3000/api/veterinarios/me \
- -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwicm9sZSI6InVzZXIiLCJpYXQiOjE3NzEyODQ1MTYsImV4cCI6MTc3MTM3MDkxNiwiaXNzIjoiY3Vyc28tdXRuLWJhY2tlbmQifQ.7WrSDyjSjiCcpINS6cd_o7XOTBVrQc1UMWf4wESQOyc"
-
-# Obtener historia clinica en base al token del usuario logueado
-
-curl -X GET "http://localhost:3000/api/historialClinico/me" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwicm9sZSI6InVzZXIiLCJpYXQiOjE3NzEyODQ1MTYsImV4cCI6MTc3MTM3MDkxNiwiaXNzIjoiY3Vyc28tdXRuLWJhY2tlbmQifQ.7WrSDyjSjiCcpINS6cd_o7XOTBVrQc1UMWf4wESQOyc"
-
-# Crear una historia clinica del usurio logueado en base al token generado en el login
-
-curl -X POST http://localhost:3000/api/historialClinico \
- -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwicm9sZSI6InVzZXIiLCJpYXQiOjE3NzEzNDQ2MzksImV4cCI6MTc3MTQzMTAzOSwiaXNzIjoiY3Vyc28tdXRuLWJhY2tlbmQifQ.OhUZ2jI_dgpaSdZeqqokXpD-TgCKjrqq91f2p6no_6c" \
- -H "Content-Type: application/json" \
- -d '{
-"id_mascota": 1,
-"descripcion": "Consulta por vacunación"
-}'
+```bash
+export TOKEN="eyJ..."
+curl -sS -X GET http://localhost:3000/api/duenios -H "Authorization: Bearer $TOKEN"
+```
