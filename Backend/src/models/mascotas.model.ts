@@ -2,6 +2,10 @@ import pool from "../database/mysql";
 import { RowDataPacket } from "mysql2";
 import { IMascota } from "../types/IMascota";
 import { ResultSetHeader } from "mysql2";
+import {
+  IHistorialClinico,
+  IHistorialClinicoDTO,
+} from "../types/IHistorialClinico";
 
 export type MascotaRow = IMascota & RowDataPacket;
 
@@ -19,17 +23,12 @@ export const findMascotaById = async (id: string): Promise<IMascota | null> => {
 };
 
 export const createMascota = async (
-  mascota: Omit<IMascota, "id">,
+  mascota: Omit<IHistorialClinicoDTO, "id">,
+  duenioId: number,
 ): Promise<number> => {
   const [MascotaResult] = await pool.query(
     "INSERT INTO MASCOTAS (id_dueno, nombre, especie, fecha_nacimiento, estado ) VALUES (?,?,?,?,?)",
-    [
-      mascota.id_duenio,
-      mascota.nombre,
-      mascota.especie,
-      mascota.fecha_nacimiento,
-      1, // estado activo por defecto
-    ],
+    [duenioId, mascota.mascota, mascota.raza, mascota.fecha_nacimiento, 1],
   );
   return (MascotaResult as any).insertId;
 };

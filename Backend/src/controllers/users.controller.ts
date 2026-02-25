@@ -20,7 +20,7 @@ export const getById = async (req: Request, res: Response) => {
   if (!req.user.id) {
     return res.status(401).json({ message: "Usuario no autenticado." });
   }
-  const userId = req.user.id.toString(); // 👈 SALE DEL TOKEN
+  const userId = req.user.id.toString();
   try {
     const usuarioData = await usersService.getUsuarioById(userId);
     if (!usuarioData) {
@@ -51,7 +51,7 @@ export const update = async (req: Request, res: Response) => {
   if (!req.user.id) {
     return res.status(401).json({ message: "Usuario no autenticado." });
   }
-  const userId = req.user.id.toString(); // 👈 SALE DEL TOKEN
+  const userId = req.user.id.toString();
   try {
     const usuarioData: IUsuario = req.body;
     const usuarioUpdated = await usersService.editUsuario(userId, usuarioData);

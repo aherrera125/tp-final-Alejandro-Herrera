@@ -6,6 +6,7 @@ import {
   updateDuenio,
   deleteDuenio,
 } from "../models/duenios.model";
+import { IHistorialClinico } from "../types/IHistorialClinico";
 
 export const getAllDuenios = async () => {
   return await findAllDuenios();
@@ -15,9 +16,9 @@ export const getDuenioById = async (id: string): Promise<IDuenio | null> => {
   return await findDuenio(id);
 };
 
-export const addDuenio = async (data: IDuenio) => {
+/*export const addDuenio = async (data: IDuenio) => {
   return await createDuenio(data);
-};
+};*/
 
 export const editDuenio = async (id: string, data: IDuenio) => {
   return await updateDuenio(id, data);

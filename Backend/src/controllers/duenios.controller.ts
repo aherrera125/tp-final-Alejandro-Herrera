@@ -28,7 +28,7 @@ export const getById = async (_req: Request, res: Response) => {
   }
 };
 //create()
-export const create = async (req: Request, res: Response) => {
+/*export const create = async (req: Request, res: Response) => {
   try {
     const duenioData: IDuenio = req.body;
     const duenioCreated = await dueniosService.addDuenio(duenioData);
@@ -36,7 +36,7 @@ export const create = async (req: Request, res: Response) => {
   } catch (error) {
     return res.status(500).json({ message: `Error al crear el dueño.` });
   }
-};
+};*/
 //update()
 export const update = async (req: Request, res: Response) => {
   const { id } = req.params;

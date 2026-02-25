@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: mysql:3306
--- Tiempo de generación: 22-02-2026 a las 14:28:49
+-- Tiempo de generación: 25-02-2026 a las 02:46:12
 -- Versión del servidor: 8.0.44
 -- Versión de PHP: 8.3.26
 
@@ -47,7 +47,13 @@ INSERT INTO `duenos` (`id`, `nombre`, `apellido`, `telefono`, `direccion`, `esta
 (1, 'Juan Carlos', 'Medina', '3815153426', 'Av. Roca 1258', 1),
 (2, 'Miguel', 'Flores', '3814852456', 'Silvano Bores 542', 1),
 (3, 'Marcela Luz', 'Quintero', '3813789123', 'Calle de Barcelona 1041', 1),
-(8, 'Julio', 'Perez', '123456789', 'Calle Falsa 123', 1);
+(8, 'Julio', 'Perez', '123456789', 'Calle Falsa 123', 1),
+(9, 'Sandra', 'Herrera', '3815456852', 'Fortunata Garcia 1449', 1),
+(10, 'Sandra', 'Herrera', '3815456852', 'Fortunata Garcia 1449', 1),
+(11, 'Sandra', 'Herrera', '3815456852', 'Fortunata Garcia 1449', 1),
+(12, 'Sandra', 'Herrera', '3815456852', 'Fortunata Garcia 1449', 1),
+(13, 'Sandra', 'Herrera', '3815456852', 'Fortunata Garcia 1449', 1),
+(14, 'Sandra', 'Herrera', '3815456852', 'Fortunata Garcia 1449', 1);
 
 -- --------------------------------------------------------
 
@@ -243,7 +249,7 @@ ALTER TABLE `user_roles`
 -- AUTO_INCREMENT de la tabla `duenos`
 --
 ALTER TABLE `duenos`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `historial_clinico`

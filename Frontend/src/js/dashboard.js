@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
-  //const token = localStorage.getItem("token")?.replace(/"/g, "");
   console.log("Token en dashboard:", token);
 
   if (!token) {
@@ -71,47 +70,101 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "/index.html";
   }
 
-  // Handle Add History (The user's code expects a click or submit handling)
-  // I'll attach the logic to the click of addHistorialButton as requested by the flow
+  // Handle Add History Modal
   addHistorialButton.addEventListener("click", function (e) {
     agregarHistorial();
   });
 
   function agregarHistorial() {
     const mascota = document.getElementById("mascota").value.trim();
-    const duenio = document.getElementById("duenio").value.trim();
-    const vet = document.getElementById("vet").value.trim();
+    const especie = document.getElementById("especie").value.trim();
+    const fechaNacimiento = document
+      .getElementById("fechaNacimiento")
+      .value.trim();
+
+    const nombreDuenio = document.getElementById("nombreDuenio").value.trim();
+    const apellidoDuenio = document
+      .getElementById("apellidoDuenio")
+      .value.trim();
+    const telefono = document.getElementById("telefono").value.trim();
+    const direccion = document.getElementById("direccion").value.trim();
     const historial = document.getElementById("historial").value.trim();
 
-    if (!mascota || !duenio || !vet || !historial) {
+    if (
+      !mascota ||
+      !especie ||
+      !fechaNacimiento ||
+      !nombreDuenio ||
+      !apellidoDuenio ||
+      !telefono ||
+      !direccion ||
+      !historial
+    ) {
       alert("Por favor completá todos los campos");
       return;
     }
 
-    // Since the snippet provided doesn't have a fetch for POST,
-    // I will follow the logic of just rendering it locally as per the user's snippet.
-    let historiales = []; // This is local in the user's snippet, but normally it would be a state.
-    // For now, I'll just append it to the table to show it works as the user wrote it.
-    const table = document.getElementById("historialesTable");
-    table.innerHTML += `
-      <tr>
-        <td>${mascota}</td>
-        <td>${duenio}</td>
-        <td>${vet}</td>
-        <td>${historial}</td>
-      </tr>`;
+    // Preparar los datos para el POST
+    const data = {
+      nombre_duenio: nombreDuenio,
+      apellido_duenio: apellidoDuenio,
+      telefono: telefono,
+      direccion: direccion,
+      mascota: mascota,
+      raza: especie,
+      fecha_nacimiento: fechaNacimiento,
+      historial: historial,
+    };
 
-    limpiarFormulario();
+    // Hacer el fetch POST
+    fetch("http://localhost:3000/api/historialClinico", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Error HTTP " + res.status);
+        }
+        return res.json();
+      })
+      .then((result) => {
+        console.log("Historial clínico creado:", result);
+        // Recargar los datos para actualizar la tabla
+        fetch("http://localhost:3000/api/historialClinico/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            renderHistorias(data);
+          })
+          .catch((err) => console.error("Error al recargar historiales:", err));
 
-    const modal = bootstrap.Modal.getInstance(
-      document.getElementById("modalMascota"),
-    );
-    modal.hide();
+        limpiarFormulario();
+
+        const modal = bootstrap.Modal.getInstance(
+          document.getElementById("modalMascota"),
+        );
+        modal.hide();
+      })
+      .catch((err) => {
+        console.error("Error al crear historial clínico:", err);
+        alert("Error al crear el historial clínico. Inténtalo de nuevo.");
+      });
   }
 
   function limpiarFormulario() {
     document.getElementById("mascota").value = "";
-    document.getElementById("duenio").value = "";
+    document.getElementById("especie").value = "";
+    document.getElementById("nombreDuenio").value = "";
+    document.getElementById("apellidoDuenio").value = "";
+    document.getElementById("telefono").value = "";
+    document.getElementById("direccion").value = "";
     document.getElementById("vet").value = "";
     document.getElementById("historial").value = "";
   }

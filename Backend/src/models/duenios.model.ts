@@ -2,6 +2,7 @@ import pool from "../database/mysql";
 import { RowDataPacket } from "mysql2";
 import { IDuenio } from "../types/IDuenio";
 import { ResultSetHeader } from "mysql2";
+import { IHistorialClinicoDTO } from "../types/IHistorialClinico";
 
 export type DuenioRow = IDuenio & RowDataPacket;
 
@@ -19,11 +20,16 @@ export const findDuenio = async (id: string): Promise<IDuenio | null> => {
 };
 
 export const createDuenio = async (
-  duenio: Omit<IDuenio, "id">,
+  duenio: Omit<IHistorialClinicoDTO, "id">,
 ): Promise<number> => {
   const [DuenioResult] = await pool.query(
     "INSERT INTO DUENOS (nombre, apellido, telefono, direccion) VALUES (?,?,?,?)",
-    [duenio.nombre, duenio.apellido, duenio.telefono, duenio.direccion],
+    [
+      duenio.nombre_duenio,
+      duenio.apellido_duenio,
+      duenio.telefono,
+      duenio.direccion,
+    ],
   );
   return (DuenioResult as any).insertId;
 };

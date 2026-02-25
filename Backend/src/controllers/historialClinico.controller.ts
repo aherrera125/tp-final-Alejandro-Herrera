@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import * as historialClinicoService from "../services/historialClinico.service";
-import { IHistorialClinico } from "../types/IHistorialClinico";
+import {
+  IHistorialClinico,
+  IHistorialClinicoDTO,
+} from "../types/IHistorialClinico";
 
 //getAll
 export const getAll = async (_req: Request, res: Response) => {
@@ -64,7 +67,7 @@ export const create = async (req: Request, res: Response) => {
       return res.status(401).json({ message: "Usuario no autenticado." });
     }
     const userId = req.user.id?.toString() ?? "";
-    const historialClinicoData: IHistorialClinico = req.body;
+    const historialClinicoData: IHistorialClinicoDTO = req.body;
 
     const historialClinicoCreated =
       await historialClinicoService.addHistorialClinico(
@@ -73,6 +76,7 @@ export const create = async (req: Request, res: Response) => {
       );
     return res.status(201).json({ historialClinicoCreated });
   } catch (error) {
+    console.error("Error al crear el Historial Clinico:", error);
     return res
       .status(500)
       .json({ message: `Error al crear el Historial Clinico.` });

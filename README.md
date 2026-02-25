@@ -257,8 +257,12 @@ _Agregar capturas de pantalla del sistema aquí cuando estén disponibles._
 1. **Iniciar Backend**: Ejecutar `npm run dev` en `Backend/`
 2. **Iniciar Frontend**: Ejecutar `npm run dev` en `Frontend/`
 3. **Acceder**: Abrir `http://localhost:5173` en el navegador
-4. **Login**: Usar credenciales de ejemplo (si se importó el SQL de ejemplo) o registrar nuevo usuario.
-   - Nota: las cuentas semilla están en `veterinaria_patitas_felices.sql`. Si no conoces la contraseña de una cuenta de ejemplo, registra un nuevo usuario o restablece la contraseña en la base de datos.
+4. **Login**: Usar las siguientes credenciales de ejemplo:
+   - Email: luis.luna@patitasfelices.com
+   - Contraseña: SecurePass125!
+
+   O registrar un nuevo usuario.
+
 5. **Gestionar**: Usar el dashboard para administrar mascotas y ver historial
 
 ---
