@@ -78,9 +78,15 @@ document.addEventListener("DOMContentLoaded", () => {
   function agregarHistorial() {
     const mascota = document.getElementById("mascota").value.trim();
     const especie = document.getElementById("especie").value.trim();
-    const fechaNacimiento = document
-      .getElementById("fechaNacimiento")
-      .value.trim();
+
+    const fechaRaw = document.getElementById("fechaNacimiento").value;
+    let fechaNacimiento = "2020-02-20"; // Valor por defecto en caso de error
+    if (fechaRaw) {
+      const fechaObj = new Date(fechaRaw);
+      if (!isNaN(fechaObj.getTime())) {
+        fechaNacimiento = fechaObj.toISOString().split("T")[0];
+      }
+    }
 
     const nombreDuenio = document.getElementById("nombreDuenio").value.trim();
     const apellidoDuenio = document
@@ -89,6 +95,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const telefono = document.getElementById("telefono").value.trim();
     const direccion = document.getElementById("direccion").value.trim();
     const historial = document.getElementById("historial").value.trim();
+
+    console.log("Datos del formulario:", {
+      mascota,
+      especie,
+      fechaNacimiento,
+      nombreDuenio,
+      apellidoDuenio,
+      telefono,
+      direccion,
+      historial,
+    });
 
     if (
       !mascota ||
@@ -112,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
       direccion: direccion,
       mascota: mascota,
       raza: especie,
-      fecha_nacimiento: fechaNacimiento,
+      fecha_nacimiento: fechaNacimiento, // Ahora se envía como YYYY-MM-DD
       historial: historial,
     };
 
@@ -121,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`, // El token ya contiene el ID del usuario
       },
       body: JSON.stringify(data),
     })
