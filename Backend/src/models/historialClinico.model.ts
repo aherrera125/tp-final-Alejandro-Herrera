@@ -1,6 +1,9 @@
 import pool from "../database/mysql";
 import { RowDataPacket } from "mysql2";
-import { IHistorialClinico } from "../types/IHistorialClinico";
+import {
+  IHistorialClinico,
+  IHistorialClinicoDTO,
+} from "../types/IHistorialClinico";
 import { ResultSetHeader } from "mysql2";
 
 export type HistorialClinicoRow = IHistorialClinico & RowDataPacket;
@@ -54,38 +57,24 @@ export const findHistorialClinicoByUserId = async (
 
 export const createHistorialClinico = async (
   userId: string,
-  historialClinico: Omit<IHistorialClinico, "id">,
+  mascotaId: number,
+  historialClinico: Omit<IHistorialClinicoDTO, "id">,
 ): Promise<number> => {
-  const [historialIdRows]: any = await pool.query(
-    `INSERT INTO historial_clinico(id_mascota, fecha_registro, descripcion, status, id_user) 
-     VALUES (?,?,?,?,?)`,
-    [
-      historialClinico.id_mascota,
-      historialClinico.fecha_registro,
-      historialClinico.descripcion,
-      1, // status por defecto en true
-      userId,
-    ],
-  );
-
-  if (!historialIdRows || historialIdRows.length === 0) {
-    throw new Error("No se pudo crear el historial clínico");
-  }
-
-  const historialId = historialIdRows[0].insertId;
-
-  if (!historialClinico.id_mascota || !historialClinico.descripcion) {
+  if (!mascotaId || !historialClinico.historial) {
     throw new Error("Faltan datos obligatorios para crear historial clínico");
   }
 
-  const { id_mascota, descripcion } = historialClinico;
-
-  const [historialClinicoResult] = await pool.query(
-    `INSERT INTO HISTORIAL_CLINICO (id_mascota, id_user, descripcion) 
-     VALUES (?,?,?)`,
-    [id_mascota, userId, descripcion],
-  );
-  return (historialClinicoResult as any).insertId;
+  try {
+    const [historialClinicoResult] = await pool.query(
+      `INSERT INTO HISTORIAL_CLINICO (id_mascota, descripcion, status, id_user) 
+       VALUES (?,?,?,?)`,
+      [mascotaId, historialClinico.historial, 1, userId],
+    );
+    return (historialClinicoResult as any).insertId;
+  } catch (error) {
+    console.error("Error in createHistorialClinico query:", error);
+    throw error;
+  }
 };
 
 export const updateHistorialClinico = async (

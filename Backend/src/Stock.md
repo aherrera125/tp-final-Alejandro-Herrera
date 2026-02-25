@@ -185,8 +185,14 @@ curl -sS -X POST http://localhost:3000/api/historialClinico \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
-    "id_mascota": 3,
-    "descripcion": "Chequeo anual: todo ok"
+    "nombre_duenio": "Juan",
+    "apellido_duenio": "Pérez",
+    "telefono": "123456789",
+    "direccion": "Calle Falsa 123",
+    "mascota": "Firulais",
+    "raza": "Perro",
+    "fecha_nacimiento": "2020-01-01",
+    "historial": "Consulta por vacunación"
   }'
 ```
 
@@ -197,8 +203,9 @@ curl -sS -X PUT http://localhost:3000/api/historialClinico/5 \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
-    "id_mascota": 3,
-    "descripcion": "Tratamiento completado"
+    "id_mascota": "3",
+    "descripcion": "Tratamiento completado",
+    "status": true
   }'
 ```
 

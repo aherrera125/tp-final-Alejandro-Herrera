@@ -1,4 +1,7 @@
-import { IHistorialClinico } from "../types/IHistorialClinico";
+import {
+  IHistorialClinico,
+  IHistorialClinicoDTO,
+} from "../types/IHistorialClinico";
 import {
   findAllHistorialClinico,
   findHistorialClinicoById,
@@ -7,6 +10,8 @@ import {
   updateHistorialClinico,
   deleteHistorialClinico,
 } from "../models/historialClinico.model";
+import { createDuenio } from "../models/duenios.model";
+import { createMascota } from "../models/mascotas.model";
 
 export const getAllHistorialClinico = async () => {
   return await findAllHistorialClinico();
@@ -27,9 +32,16 @@ export const getHistorialClinicoByUserId = async (
 
 export const addHistorialClinico = async (
   userId: string,
-  data: IHistorialClinico,
+  data: IHistorialClinicoDTO,
 ) => {
-  return await createHistorialClinico(userId, data);
+  try {
+    const duenioId = await createDuenio(data);
+    const mascotaId = await createMascota(data, duenioId);
+    return await createHistorialClinico(userId, mascotaId, data);
+  } catch (error) {
+    console.error("Error in addHistorialClinico:", error);
+    throw error;
+  }
 };
 
 export const editHistorialClinico = async (
