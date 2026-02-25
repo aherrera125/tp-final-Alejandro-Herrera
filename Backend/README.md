@@ -103,6 +103,19 @@ La API estará disponible en `http://localhost:${PORT || 3000}` (por defecto `30
 
 ---
 
+## 🔍 Uso del Sistema
+
+1. **Ejecutar la aplicación**: Sigue los pasos de instalación anteriores.
+2. **Login**: Usa las siguientes credenciales de ejemplo para probar la API:
+   - Email: luis.luna@patitasfelices.com
+   - Contraseña: SecurePass125!
+
+   O registra un nuevo usuario vía POST `/auth/register`.
+
+3. **Probar endpoints**: Utiliza las rutas documentadas arriba con el token JWT obtenido del login.
+
+---
+
 ## 📦 Rutas principales
 
 - Auth
