@@ -21,7 +21,21 @@ export const findHistorialClinicoById = async (
   id: string,
 ): Promise<IHistorialClinico | null> => {
   const [rows] = await pool.query<HistorialClinicoRow[]>(
-    "SELECT * FROM HISTORIAL_CLINICO WHERE id = ?",
+    `SELECT ma.id mascotaId,
+	          ma.nombre mascotaNombre, 
+	          ma.especie mascotaEspecie, 
+            ma.edad mascotaEdad, 
+            du.id duenioId,
+            du.nombre duenioNombre,
+            du.apellido duenioApellido,
+            du.telefono, 
+            du.direccion,
+            hc.id historiaId,
+            hc.descripcion 
+    FROM HISTORIAL_CLINICO hc
+    INNER JOIN mascotas ma on ma.id = hc.id_mascota
+    INNER JOIN duenos du on du.id = ma.id_dueno
+    WHERE hc.id =  ?`,
     [id],
   );
   return rows.length ? rows[0] : null;
@@ -31,25 +45,22 @@ export const findHistorialClinicoByUserId = async (
   userId: string,
 ): Promise<IHistorialClinico[]> => {
   const [rows] = await pool.query<HistorialClinicoRow[]>(
-    `SELECT hc.id, 
-            hc.fecha_registro, 
-            hc.descripcion,
+    `SELECT hc.id historialId,            
+            DATE_FORMAT(CONVERT_TZ(fecha_registro, '+00:00', '+00:00'), '%d/%m/%Y') 
+            AS fecha_registro,
             ma.id AS id_mascota,
-            ma.nombre AS nom_mascota, 
-            ma.especie,
-            ma.fecha_nacimiento,
+            ma.nombre AS nom_mascota,
+            ma.edad AS edad_mascota,
+            ma.especie AS especie,
             d.id AS id_duenio,
             d.nombre AS nom_duenio, 
-            d.apellido AS ape_duenio, 
-            d.telefono,
-            us.id AS id_veterinario,
-            us.nombre AS nom_vete, 
-            us.apellido AS ape_vete            
+            d.apellido AS ape_duenio,
+            d.telefono
      FROM historial_clinico hc 
      INNER JOIN users us ON us.id = hc.id_user
      INNER JOIN mascotas ma ON ma.id = hc.id_mascota
      INNER JOIN duenos d ON d.id = ma.id_dueno
-     WHERE us.id = ?`,
+     WHERE us.id = ? AND hc.status = 1`,
     [userId],
   );
   return rows;

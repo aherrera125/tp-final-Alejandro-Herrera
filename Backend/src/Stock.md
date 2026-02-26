@@ -134,7 +134,7 @@ curl -sS -X GET http://localhost:3000/api/users \
 Obtener datos del usuario autenticado
 
 ```bash
-curl -sS -X GET http://localhost:3000/api/users/me \
+curl -sS -X GET http://localhost:3000/api/users/byUserId \
   -H "Authorization: Bearer $TOKEN"
 ```
 
@@ -167,7 +167,7 @@ curl -sS -X GET http://localhost:3000/api/historialClinico \
 Obtener historial del usuario autenticado
 
 ```bash
-curl -sS -X GET http://localhost:3000/api/historialClinico/me \
+curl -sS -X GET http://localhost:3000/api/historialClinico/byUserId \
   -H "Authorization: Bearer $TOKEN"
 ```
 

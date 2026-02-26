@@ -9,9 +9,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const dashboardForm = document.getElementById("dashboardForm");
   const addHistorialButton = document.getElementById("addHistorialButton");
+  const table = document.getElementById("historialesTable");
+  const cancelHistorialButton = document.getElementById(
+    "cancelHistorialButton",
+  );
+  const closeHistorialButton = document.getElementById("closeHistorialButton");
 
   // Fetch initial data
-  fetch("http://localhost:3000/api/historialClinico/me", {
+  fetch("http://localhost:3000/api/historialClinico/byUserId", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -40,19 +45,88 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderHistorias(historiales) {
     console.log("Renderizando historiales:", historiales);
-    const table = document.getElementById("historialesTable");
     table.innerHTML = "";
 
     historiales.forEach((h) => {
       table.innerHTML += `
       <tr>
         <td>${h.nom_mascota}</td>
+        <td>${h.edad_mascota}</td>
+        <td>${h.especie}</td>
         <td>${h.nom_duenio} ${h.ape_duenio}</td>
         <td>${h.telefono}</td>
-        <td>${h.nom_vete} ${h.ape_vete}</td>
-        <td>${h.descripcion}</td>
+        <td>${h.fecha_registro}</td>
+        <td class="text-center">
+        <button 
+          class="btn btn-sm btn-outline-primary btn-detalle"
+          data-id="${h.historialId}"
+          title="Ver detalle"
+          data-bs-toggle="modal"
+          data-bs-target="#modalMascota"
+        >
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </td>
       </tr>`;
     });
+  }
+
+  table.addEventListener("click", (e) => {
+    const btn = e.target.closest(".btn-detalle");
+    if (!btn) return;
+
+    const historialId = btn.dataset.id;
+    console.log("Ver detalle de historial:", historialId);
+
+    fetch(`http://localhost:3000/api/historialClinico/${historialId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (res.status === 401 || res.status === 403) {
+          console.error("Token no válido o sin permisos");
+          localStorage.removeItem("token");
+          window.location.href = "/index.html";
+          throw new Error("No autorizado");
+        }
+
+        if (!res.ok) {
+          throw new Error("Error HTTP " + res.status);
+        }
+
+        return res.json();
+      })
+      .then((data) => {
+        console.log("Datos del historial clínico:", data);
+        // Renderizar los detalles del historial clínico
+        renderHistoriaDetalle(data);
+      })
+      .catch((err) => {
+        console.error("Error en fetch:", err);
+      });
+  });
+
+  function renderHistoriaDetalle(historialesDetalle) {
+    console.log("Renderizando detalle de una historia:", historialesDetalle);
+    //addHistorialButton.classList.add("disabled");
+
+    document.getElementById("mascota").value =
+      historialesDetalle.historialClinicoData.mascotaNombre;
+    document.getElementById("especie").value =
+      historialesDetalle.historialClinicoData.mascotaEspecie;
+    document.getElementById("edadMascota").value =
+      historialesDetalle.historialClinicoData.mascotaEdad;
+    document.getElementById("nombreDuenio").value =
+      historialesDetalle.historialClinicoData.duenioNombre;
+    document.getElementById("apellidoDuenio").value =
+      historialesDetalle.historialClinicoData.duenioApellido;
+    document.getElementById("telefono").value =
+      historialesDetalle.historialClinicoData.telefono;
+    document.getElementById("direccion").value =
+      historialesDetalle.historialClinicoData.direccion;
+    document.getElementById("historial").value =
+      historialesDetalle.historialClinicoData.descripcion;
   }
 
   // Handle Logout (from the dashboardForm in nav)
@@ -70,24 +144,22 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "/index.html";
   }
 
-  // Handle Add History Modal
   addHistorialButton.addEventListener("click", function (e) {
     agregarHistorial();
   });
 
+  cancelHistorialButton.addEventListener("click", function (e) {
+    limpiarFormulario();
+  });
+
+  closeHistorialButton.addEventListener("click", function (e) {
+    limpiarFormulario();
+  });
+
   function agregarHistorial() {
     const mascota = document.getElementById("mascota").value.trim();
+    const edad = document.getElementById("edadMascota").value.trim();
     const especie = document.getElementById("especie").value.trim();
-
-    const fechaRaw = document.getElementById("fechaNacimiento").value;
-    let fechaNacimiento = "2020-02-20"; // Valor por defecto en caso de error
-    if (fechaRaw) {
-      const fechaObj = new Date(fechaRaw);
-      if (!isNaN(fechaObj.getTime())) {
-        fechaNacimiento = fechaObj.toISOString().split("T")[0];
-      }
-    }
-
     const nombreDuenio = document.getElementById("nombreDuenio").value.trim();
     const apellidoDuenio = document
       .getElementById("apellidoDuenio")
@@ -98,8 +170,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log("Datos del formulario:", {
       mascota,
+      edad,
       especie,
-      fechaNacimiento,
       nombreDuenio,
       apellidoDuenio,
       telefono,
@@ -109,8 +181,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (
       !mascota ||
+      !edad ||
       !especie ||
-      !fechaNacimiento ||
       !nombreDuenio ||
       !apellidoDuenio ||
       !telefono ||
@@ -128,17 +200,17 @@ document.addEventListener("DOMContentLoaded", () => {
       telefono: telefono,
       direccion: direccion,
       mascota: mascota,
+      edad_mascota: parseInt(edad),
       raza: especie,
-      fecha_nacimiento: fechaNacimiento, // Ahora se envía como YYYY-MM-DD
       historial: historial,
     };
 
-    // Hacer el fetch POST
+    // Hacer el fetch POST - Crear nuevo historial clínico
     fetch("http://localhost:3000/api/historialClinico", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // El token ya contiene el ID del usuario
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(data),
     })
@@ -151,7 +223,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .then((result) => {
         console.log("Historial clínico creado:", result);
         // Recargar los datos para actualizar la tabla
-        fetch("http://localhost:3000/api/historialClinico/me", {
+        fetch("http://localhost:3000/api/historialClinico/byUserId", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -178,11 +250,11 @@ document.addEventListener("DOMContentLoaded", () => {
   function limpiarFormulario() {
     document.getElementById("mascota").value = "";
     document.getElementById("especie").value = "";
+    document.getElementById("edadMascota").value = "";
     document.getElementById("nombreDuenio").value = "";
     document.getElementById("apellidoDuenio").value = "";
     document.getElementById("telefono").value = "";
     document.getElementById("direccion").value = "";
-    document.getElementById("vet").value = "";
     document.getElementById("historial").value = "";
   }
 
