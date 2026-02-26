@@ -15,6 +15,10 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
   </head>
 
   <body>
@@ -52,14 +56,15 @@
         </div>
 
         <div class="table-responsive">
-          <table class="table table-hover align-middle">
+          <table id="tabla-historiales" class="table table-hover align-middle">
             <thead>
               <tr>
                 <th>Mascota</th>
+                <th>Edad</th>
+                <th>Especie</th>
                 <th>Dueño</th>
-                <th>Teléfono</th>
-                <th>Veterinario</th>
-                <th>Detalle Historial</th>
+                <th>Telefono</th>
+                <th>Fecha</th>
               </tr>
             </thead>
             <tbody id="historialesTable">
@@ -70,7 +75,7 @@
       </div>
     </div>
 
-    <!-- Record Modal (Add) -->
+    <!--Modal botstrap - historia clinica-->
     <div class="modal fade" id="modalMascota" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div
@@ -81,17 +86,14 @@
             <h5 class="modal-title fw-bold">Nueva Historia Clínica</h5>
             <button
               type="button"
+              id="closeHistorialButton"
               class="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
             ></button>
           </div>
           <div class="modal-body p-4">
-            <!-- Note: The script uses a form submission on dashboardForm, but the modal is separate. 
-                         Actually, the script attaches the listener to dashboardForm which typically wraps the buttons.
-                         I'll put the add button inside the same form to satisfy e.submitter. -->
             <form id="addHistoryForm">
-              <!-- Internal form for cleanup, but main buttons will be ID'd for dashForm -->
               <div class="row g-3">
                 <div class="col-md-6">
                   <label class="form-label">Nombre Mascota</label>
@@ -102,7 +104,7 @@
                     required
                   />
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
                   <label class="form-label">Especie</label>
                   <input
                     type="text"
@@ -111,11 +113,11 @@
                     required
                   />
                 </div>
-                <div class="col-md-6">
-                  <label class="form-label">Fecha Nacimiento</label>
+                <div class="col-md-3">
+                  <label class="form-label">Edad</label>
                   <input
                     type="text"
-                    id="fechaNacimiento"
+                    id="edadMascota"
                     class="form-control"
                     required
                   />
@@ -138,7 +140,7 @@
                     required
                   />
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <label class="form-label">Telefono</label>
                   <input
                     type="text"
@@ -147,7 +149,7 @@
                     required
                   />
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-8">
                   <label class="form-label">Direccion</label>
                   <input
                     type="text"
@@ -156,10 +158,6 @@
                     required
                   />
                 </div>
-                <!--<div class="col-md-6">
-                  <label class="form-label">Veterinario</label>
-                  <input type="text" id="vet" class="form-control" required />
-                </div>-->
                 <div class="col-12">
                   <label class="form-label">Detalle Historial</label>
                   <textarea
@@ -173,13 +171,13 @@
               <div class="mt-4 text-end">
                 <button
                   type="button"
+                  id="cancelHistorialButton"
                   class="btn btn-secondary me-2"
                   data-bs-dismiss="modal"
                 >
                   Cancelar
                 </button>
-                <!-- This button belongs to dashboardForm emotionally, but needs to be triggered. 
-                                 Actually, let's wrap the WHOLE thing or just make sure IDs match. -->
+
                 <button
                   type="button"
                   id="addHistorialButton"

@@ -10,7 +10,7 @@ router.get(
   historialClinicoController.getAll,
 );
 router.get(
-  "/me",
+  "/byUserId",
   authenticate,
   authorize(["user"]),
   historialClinicoController.getByUserId,
