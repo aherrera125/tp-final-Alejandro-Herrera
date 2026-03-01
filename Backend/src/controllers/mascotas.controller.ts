@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { IMascota } from "../types/IMascota";
 import * as mascotasService from "../services/mascotas.service";
+import { IHistorialClinicoDTO } from "../types/IHistorialClinico";
 
 //getAll
 export const getAll = async (_req: Request, res: Response) => {
@@ -41,7 +42,7 @@ export const create = async (req: Request, res: Response) => {
 export const update = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const mascotaData: IMascota = req.body;
+    const mascotaData: IHistorialClinicoDTO = req.body;
     const mascotaUpdated = await mascotasService.editMascota(id, mascotaData);
     if (!mascotaUpdated) {
       return res.status(404).json({ message: `Mascota no encontrada.` });

@@ -90,13 +90,13 @@ export const createHistorialClinico = async (
 
 export const updateHistorialClinico = async (
   id: string,
-  historialClinico: IHistorialClinico,
+  historialClinico: IHistorialClinicoDTO,
 ): Promise<IHistorialClinico | null> => {
   const [result] = await pool.query<ResultSetHeader>(
     `UPDATE HISTORIAL_CLINICO
      SET descripcion = ?
      WHERE id = ?`,
-    [historialClinico.descripcion, id],
+    [historialClinico.historial, id],
   );
 
   if (result.affectedRows === 0) {

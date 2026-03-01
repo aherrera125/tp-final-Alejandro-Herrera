@@ -10,8 +10,17 @@ import {
   updateHistorialClinico,
   deleteHistorialClinico,
 } from "../models/historialClinico.model";
-import { createDuenio } from "../models/duenios.model";
-import { createMascota } from "../models/mascotas.model";
+import {
+  createDuenio,
+  findDuenioByMascotaId,
+  updateDuenio,
+} from "../models/duenios.model";
+import {
+  createMascota,
+  findMascotaByHistorialId,
+  updateMascota,
+} from "../models/mascotas.model";
+import { update } from "../controllers/duenios.controller";
 
 export const getAllHistorialClinico = async () => {
   return await findAllHistorialClinico();
@@ -45,10 +54,20 @@ export const addHistorialClinico = async (
 };
 
 export const editHistorialClinico = async (
-  id: string,
-  data: IHistorialClinico,
+  historialId: string,
+  data: IHistorialClinicoDTO,
 ) => {
-  return await updateHistorialClinico(id, data);
+  //modificar los datos de la mascota en la historia clinica
+  /*const mascotaId = await findMascotaByHistorialId(historialId);
+  if (!mascotaId) {
+    throw new Error("Mascota not found for the given historial ID");
+  }
+  await updateMascota(mascotaId, data);
+  //modificar los datos del dueño en la historia clinica
+  const duenioId = await findDuenioByMascotaId(mascotaId);
+  await updateDuenio(duenioId, data);*/
+
+  return await updateHistorialClinico(historialId, data);
 };
 
 export const removeHistorialClinico = async (id: string) => {

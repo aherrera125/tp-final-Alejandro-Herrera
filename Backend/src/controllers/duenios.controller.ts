@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { IDuenio } from "../types/IDuenio";
 import * as dueniosService from "../services/duenios.service";
+import { IHistorialClinicoDTO } from "../types/IHistorialClinico";
 
 //getAll
 export const getAll = async (_req: Request, res: Response) => {
@@ -41,7 +42,7 @@ export const getById = async (_req: Request, res: Response) => {
 export const update = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const duenioData: IDuenio = req.body;
+    const duenioData: IHistorialClinicoDTO = req.body;
     const duenioUpdated = await dueniosService.editDuenio(id, duenioData);
     if (!duenioUpdated) {
       return res.status(404).json({ message: `Dueño no encontrado.` });

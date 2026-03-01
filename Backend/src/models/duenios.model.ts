@@ -19,6 +19,16 @@ export const findDuenio = async (id: string): Promise<IDuenio | null> => {
   return rows.length ? rows[0] : null;
 };
 
+export const findDuenioByMascotaId = async (
+  mascotaId: string,
+): Promise<string | null> => {
+  const [rows] = await pool.query<DuenioRow[]>(
+    `SELECT id_dueno FROM mascotas WHERE id = ?`,
+    [mascotaId],
+  );
+  return rows.length ? rows[0].id_dueno : null;
+};
+
 export const createDuenio = async (
   duenio: Omit<IHistorialClinicoDTO, "id">,
 ): Promise<number> => {
@@ -35,14 +45,20 @@ export const createDuenio = async (
 };
 
 export const updateDuenio = async (
-  id: string,
-  duenio: IDuenio,
+  id: string | null,
+  duenio: IHistorialClinicoDTO,
 ): Promise<IDuenio | null> => {
   const [result] = await pool.query<ResultSetHeader>(
     `UPDATE DUENOS
      SET nombre = ?, apellido = ?, telefono = ?, direccion = ?
      WHERE id = ?`,
-    [duenio.nombre, duenio.apellido, duenio.telefono, duenio.direccion, id],
+    [
+      duenio.nombre_duenio,
+      duenio.apellido_duenio,
+      duenio.telefono,
+      duenio.direccion,
+      id,
+    ],
   );
 
   if (result.affectedRows === 0) {

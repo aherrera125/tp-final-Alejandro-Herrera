@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
   );
   const closeHistorialButton = document.getElementById("closeHistorialButton");
 
-  // Fetch initial data
   fetch("http://localhost:3000/api/historialClinico/byUserId", {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -99,7 +98,6 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .then((data) => {
         console.log("Datos del historial clínico:", data);
-        // Renderizar los detalles del historial clínico
         renderHistoriaDetalle(data);
       })
       .catch((err) => {
@@ -109,7 +107,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderHistoriaDetalle(historialesDetalle) {
     console.log("Renderizando detalle de una historia:", historialesDetalle);
-    //addHistorialButton.classList.add("disabled");
+    addHistorialButton.textContent = "Modificar";
+    addHistorialButton.dataset.historialId =
+      historialesDetalle.historialClinicoData.historiaId;
 
     document.getElementById("mascota").value =
       historialesDetalle.historialClinicoData.mascotaNombre;
@@ -129,7 +129,6 @@ document.addEventListener("DOMContentLoaded", () => {
       historialesDetalle.historialClinicoData.descripcion;
   }
 
-  // Handle Logout (from the dashboardForm in nav)
   dashboardForm.addEventListener("submit", async function (e) {
     e.preventDefault();
     const button = e.submitter;
@@ -145,21 +144,23 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   addHistorialButton.addEventListener("click", function (e) {
-    agregarHistorial();
+    agregarHistorial(e);
   });
 
   cancelHistorialButton.addEventListener("click", function (e) {
+    addHistorialButton.textContent = "Guardar";
     limpiarFormulario();
   });
 
   closeHistorialButton.addEventListener("click", function (e) {
+    addHistorialButton.textContent = "Guardar";
     limpiarFormulario();
   });
 
-  function agregarHistorial() {
+  function agregarHistorial(e) {
     const mascota = document.getElementById("mascota").value.trim();
-    const edad = document.getElementById("edadMascota").value.trim();
     const especie = document.getElementById("especie").value.trim();
+    const edad = document.getElementById("edadMascota").value.trim();
     const nombreDuenio = document.getElementById("nombreDuenio").value.trim();
     const apellidoDuenio = document
       .getElementById("apellidoDuenio")
@@ -205,46 +206,90 @@ document.addEventListener("DOMContentLoaded", () => {
       historial: historial,
     };
 
-    // Hacer el fetch POST - Crear nuevo historial clínico
-    fetch("http://localhost:3000/api/historialClinico", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Error HTTP " + res.status);
-        }
-        return res.json();
+    //Aqui evaluar si es historia nueva o modificar
+    console.log("Evaluando si es nuevo historial o modificación...");
+    const btnText = addHistorialButton.textContent.trim();
+    console.log("Texto del botón:", btnText);
+    if (btnText === "Guardar") {
+      // Hacer el fetch POST - Crear nuevo historial clínico
+      fetch("http://localhost:3000/api/historialClinico", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
       })
-      .then((result) => {
-        console.log("Historial clínico creado:", result);
-        // Recargar los datos para actualizar la tabla
-        fetch("http://localhost:3000/api/historialClinico/byUserId", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error("Error HTTP " + res.status);
+          }
+          return res.json();
         })
-          .then((res) => res.json())
-          .then((data) => {
-            renderHistorias(data);
+        .then((result) => {
+          console.log("Historial clínico creado:", result);
+          // Recargar los datos para actualizar la tabla
+          fetch("http://localhost:3000/api/historialClinico/byUserId", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           })
-          .catch((err) => console.error("Error al recargar historiales:", err));
+            .then((res) => res.json())
+            .then((data) => {
+              renderHistorias(data);
+            })
+            .catch((err) =>
+              console.error("Error al recargar historiales:", err),
+            );
 
-        limpiarFormulario();
+          limpiarFormulario();
 
-        const modal = bootstrap.Modal.getInstance(
-          document.getElementById("modalMascota"),
-        );
-        modal.hide();
+          const modal = bootstrap.Modal.getInstance(
+            document.getElementById("modalMascota"),
+          );
+          modal.hide();
+        })
+        .catch((err) => {
+          console.error("Error al crear historial clínico:", err);
+          alert("Error al crear el historial clínico. Inténtalo de nuevo.");
+        });
+    } else {
+      // Hacer el fetch PUT – Modificar historial clínico existente
+      const historialId = addHistorialButton.dataset.historialId;
+      const data_update = {
+        nombre_duenio: nombreDuenio,
+        apellido_duenio: apellidoDuenio,
+        telefono: telefono,
+        direccion: direccion,
+        mascota: mascota,
+        edad_mascota: parseInt(edad),
+        raza: especie,
+        historial: historial,
+      };
+      fetch(`http://localhost:3000/api/historialClinico/${historialId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data_update),
       })
-      .catch((err) => {
-        console.error("Error al crear historial clínico:", err);
-        alert("Error al crear el historial clínico. Inténtalo de nuevo.");
-      });
+        .then((res) => res.json())
+        .then((data) => {
+          renderHistorias(data); // refresca la tabla
+          limpiarFormulario(); // limpia el modal
+          const modal = bootstrap.Modal.getInstance(
+            document.getElementById("modalMascota"),
+          );
+          modal.hide();
+        })
+        .catch((err) => {
+          console.error("Error al actualizar historial clínico:", err);
+          alert(
+            "Error al actualizar el historial clínico. Inténtalo de nuevo.",
+          );
+        });
+    }
   }
 
   function limpiarFormulario() {
