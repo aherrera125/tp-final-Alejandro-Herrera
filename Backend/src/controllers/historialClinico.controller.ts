@@ -86,7 +86,7 @@ export const create = async (req: Request, res: Response) => {
 export const update = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const historialClinicoData: IHistorialClinico = req.body;
+    const historialClinicoData: IHistorialClinicoDTO = req.body;
     const historialClinicoUpdated =
       await historialClinicoService.editHistorialClinico(
         id,

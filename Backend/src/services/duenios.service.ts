@@ -2,11 +2,11 @@ import { IDuenio } from "../types/IDuenio";
 import {
   findAllDuenios,
   findDuenio,
-  createDuenio,
   updateDuenio,
   deleteDuenio,
+  findDuenioByMascotaId,
 } from "../models/duenios.model";
-import { IHistorialClinico } from "../types/IHistorialClinico";
+import { IHistorialClinicoDTO } from "../types/IHistorialClinico";
 
 export const getAllDuenios = async () => {
   return await findAllDuenios();
@@ -16,11 +16,17 @@ export const getDuenioById = async (id: string): Promise<IDuenio | null> => {
   return await findDuenio(id);
 };
 
+export const getDuenioByMascotaId = async (
+  MascotaId: string,
+): Promise<IDuenio | null> => {
+  return (await findDuenioByMascotaId(MascotaId)) as IDuenio | null;
+};
+
 /*export const addDuenio = async (data: IDuenio) => {
   return await createDuenio(data);
 };*/
 
-export const editDuenio = async (id: string, data: IDuenio) => {
+export const editDuenio = async (id: string, data: IHistorialClinicoDTO) => {
   return await updateDuenio(id, data);
 };
 

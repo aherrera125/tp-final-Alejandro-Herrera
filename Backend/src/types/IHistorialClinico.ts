@@ -16,6 +16,6 @@ export interface IHistorialClinicoDTO {
   direccion: string;
   mascota: string;
   raza: string;
-  fecha_nacimiento: string;
+  edad: number;
   historial: string;
 }
