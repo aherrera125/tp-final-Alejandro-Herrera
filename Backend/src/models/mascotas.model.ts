@@ -31,11 +31,17 @@ export const findMascotaByHistorialId = async (
 
 export const createMascota = async (
   mascota: Omit<IHistorialClinicoDTO, "id">,
-  duenioId: number,
+  duenioId: string,
 ): Promise<number> => {
   const [MascotaResult] = await pool.query(
-    "INSERT INTO MASCOTAS (id_dueno, nombre, especie, fecha_nacimiento, estado ) VALUES (?,?,?,?,?)",
-    [duenioId, mascota.mascota, mascota.raza, mascota.edad, 1],
+    "INSERT INTO MASCOTAS (id_dueno, nombre, especie, estado, edad ) VALUES (?,?,?,?,?)",
+    [
+      duenioId,
+      mascota.mascotaNombre,
+      mascota.mascotaEspecie,
+      1,
+      mascota.mascotaEdad,
+    ],
   );
   return (MascotaResult as any).insertId;
 };
@@ -46,9 +52,9 @@ export const updateMascota = async (
 ): Promise<IMascota | null> => {
   const [result] = await pool.query<ResultSetHeader>(
     `UPDATE MASCOTAS
-     SET nombre = ?, especie = ?, edad = ?, estado = ?
+     SET nombre = ?, especie = ?, estado = ?, edad = ?
      WHERE id = ?`,
-    [mascota.mascota, mascota.raza, mascota.edad, 1, id],
+    [mascota.mascotaNombre, mascota.mascotaEspecie, 1, mascota.mascotaEdad, id],
   );
 
   if (result.affectedRows === 0) {

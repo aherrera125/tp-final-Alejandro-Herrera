@@ -25,7 +25,6 @@ if (loginForm) {
         return res.json();
       })
       .then((data) => {
-        console.log("Token recibido:", data.token);
         localStorage.setItem("token", data.token);
         // Also save email snippet for the greeting if name is not available in backend response
         localStorage.setItem("loggedEmail", email);

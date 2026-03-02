@@ -68,18 +68,17 @@ export const findHistorialClinicoByUserId = async (
 
 export const createHistorialClinico = async (
   userId: string,
-  mascotaId: number,
+  mascotaId: string,
   historialClinico: Omit<IHistorialClinicoDTO, "id">,
 ): Promise<number> => {
-  if (!mascotaId || !historialClinico.historial) {
+  if (!mascotaId || !historialClinico.descripcion) {
     throw new Error("Faltan datos obligatorios para crear historial clínico");
   }
-
   try {
     const [historialClinicoResult] = await pool.query(
       `INSERT INTO HISTORIAL_CLINICO (id_mascota, descripcion, status, id_user) 
        VALUES (?,?,?,?)`,
-      [mascotaId, historialClinico.historial, 1, userId],
+      [mascotaId, historialClinico.descripcion, 1, userId],
     );
     return (historialClinicoResult as any).insertId;
   } catch (error) {
@@ -96,7 +95,7 @@ export const updateHistorialClinico = async (
     `UPDATE HISTORIAL_CLINICO
      SET descripcion = ?
      WHERE id = ?`,
-    [historialClinico.historial, id],
+    [historialClinico.descripcion, id],
   );
 
   if (result.affectedRows === 0) {

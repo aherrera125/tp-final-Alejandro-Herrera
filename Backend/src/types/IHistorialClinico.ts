@@ -7,7 +7,7 @@ export interface IHistorialClinico {
   id_user: string;
 }
 
-export interface IHistorialClinicoDTO {
+/*export interface IHistorialClinicoDTO {
   id?: string;
   mascotaId?: string;
   nombre_duenio: string;
@@ -18,4 +18,16 @@ export interface IHistorialClinicoDTO {
   raza: string;
   edad: number;
   historial: string;
+}*/
+export interface IHistorialClinicoDTO {
+  id?: string;
+  mascotaId?: string;
+  mascotaNombre: string;
+  mascotaEdad: number;
+  mascotaEspecie: string;
+  duenioNombre: string;
+  duenioApellido: string;
+  telefono: string;
+  direccion: string;
+  descripcion: string;
 }

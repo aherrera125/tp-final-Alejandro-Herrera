@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: mysql:3306
--- Tiempo de generación: 25-02-2026 a las 02:46:12
+-- Tiempo de generación: 02-03-2026 a las 00:55:18
 -- Versión del servidor: 8.0.44
 -- Versión de PHP: 8.3.26
 
@@ -11,7 +11,7 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
---# Base de datos: `veterinaria_patitas_felices`
+-- Base de datos: `veterinaria_patitas_felices`
 CREATE DATABASE IF NOT EXISTS veterinaria_patitas_felices;
 USE veterinaria_patitas_felices;
 
@@ -53,7 +53,24 @@ INSERT INTO `duenos` (`id`, `nombre`, `apellido`, `telefono`, `direccion`, `esta
 (11, 'Sandra', 'Herrera', '3815456852', 'Fortunata Garcia 1449', 1),
 (12, 'Sandra', 'Herrera', '3815456852', 'Fortunata Garcia 1449', 1),
 (13, 'Sandra', 'Herrera', '3815456852', 'Fortunata Garcia 1449', 1),
-(14, 'Sandra', 'Herrera', '3815456852', 'Fortunata Garcia 1449', 1);
+(14, 'Sandra', 'Herrera', '3815456852', 'Fortunata Garcia 1449', 1),
+(15, 'Sandra', 'Herrera', '3815456852', 'Fortunata Garcia 1449', 1),
+(16, 'Sandra', 'Herrera', '3815456852', 'Fortunata Garcia 1449', 1),
+(17, 'Sandra', 'Herrera', '3815456852', 'Fortunata Garcia 1449', 1),
+(18, 'Sandra', 'Herrera', '3815456852', 'Fortunata Garcia 1449', 1),
+(19, 'Sandra', 'Herrera', '3815456852', 'Fortunata Garcia 1449', 1),
+(20, 'Jose Renato', 'Gonzalez', '3815456852', 'Fortunata Garcia 1450', 1),
+(21, 'Alejandro', 'Herrera', '3815480223', 'Celedonio Gutierrez 1259', 1),
+(22, 'alejando', 'Herrera', '3815480223', 'Celedonio Gutierrez 1259', 1),
+(23, 'alejando', 'Herrera', '3815480223', 'Celedonio Gutierrez 1259', 1),
+(24, 'alejo', 'Quintero', '3815480223', 'Celedonio Gutierrez 1259', 1),
+(25, 'Natalia', 'Quintero', '3815480223', 'Celedonio Gutierrez 1234', 1),
+(26, 'alejo', 'Quintero', '3815480223', 'Celedonio Gutierrez 1259', 1),
+(27, 'alejo', 'Quintero', '3815480223', 'Celedonio Gutierrez 1259', 1),
+(28, 'alejito', 'Lopez', '3815480223', 'Celedonio Gutierrez 1', 1),
+(29, 'Maria del Carmen', 'Sotelo', '3815123510', 'FG 1449', 1),
+(30, 'Sandra', 'Herrera', '3815258258', 'Fortunata Garcia 1449', 1),
+(31, 'Martin Maximiliano', 'Centenillo', '3815', 'Catamarca 1666', 0);
 
 -- --------------------------------------------------------
 
@@ -79,7 +96,13 @@ INSERT INTO `historial_clinico` (`id`, `id_mascota`, `fecha_registro`, `descripc
 (2, 3, '2025-08-01 00:00:00', 'Traumatismo de craneo', 1, 2),
 (3, 2, '2023-12-15 00:00:00', 'Hemorragia intestinal', 1, 3),
 (4, 2, '2026-02-16 00:00:00', 'Infeccion urinaria', 1, 4),
-(5, 1, '2026-02-17 16:47:43', 'Consulta por vacunaci�n', 1, 5);
+(5, 1, '2026-02-17 16:47:43', 'Consulta por vacunacion. Esta loquito!', 1, 5),
+(6, 5, '2026-02-25 03:37:55', 'Le duele la patita', 1, 5),
+(7, 6, '2026-02-25 03:38:57', 'respira mal', 1, 5),
+(8, 7, '2026-02-25 18:55:02', 'No salta mucho y le duele la patita al conejo', 1, 5),
+(9, 8, '2026-03-01 23:58:03', 'Tiene el caparazón pintado porque es hincha de River', 1, 5),
+(10, 9, '2026-03-02 00:07:30', 'La quieren hacer empanada!!', 1, 5),
+(11, 10, '2026-03-02 00:51:12', 'Es la oveja negra de la familia', 0, 5);
 
 -- --------------------------------------------------------
 
@@ -92,18 +115,24 @@ CREATE TABLE `mascotas` (
   `id_dueno` int NOT NULL,
   `nombre` varchar(50) NOT NULL,
   `especie` varchar(30) NOT NULL,
-  `fecha_nacimiento` date DEFAULT NULL,
-  `estado` tinyint(1) DEFAULT '1'
+  `estado` tinyint(1) DEFAULT '1',
+  `edad` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Volcado de datos para la tabla `mascotas`
 --
 
-INSERT INTO `mascotas` (`id`, `id_dueno`, `nombre`, `especie`, `fecha_nacimiento`, `estado`) VALUES
-(1, 1, 'Rocco Rodolfo', 'perro', '2020-05-14', 1),
-(2, 2, 'Alvin Martin', 'Conejo', '2023-08-03', 1),
-(3, 3, 'Mike Morel', 'gato', '2018-10-25', 1);
+INSERT INTO `mascotas` (`id`, `id_dueno`, `nombre`, `especie`, `estado`, `edad`) VALUES
+(1, 1, 'Rocco Rodolfo', 'perro', 1, 5),
+(2, 2, 'Alvin Martin', 'Conejo', 1, 5),
+(3, 3, 'Mike Morel', 'gato', 1, 5),
+(5, 19, 'Mora', 'Perro Maltes', 1, 5),
+(6, 20, 'Alvin', 'Perro Maltes', 1, 5),
+(7, 21, 'Leopoldo', 'Conejo', 1, 5),
+(8, 29, 'Manuelita', 'Tortuga', 1, 8),
+(9, 30, 'Cleopatra', 'Gallina', 1, 6),
+(10, 31, 'Blackicita', 'oveja', 0, 22);
 
 -- --------------------------------------------------------
 
@@ -249,19 +278,19 @@ ALTER TABLE `user_roles`
 -- AUTO_INCREMENT de la tabla `duenos`
 --
 ALTER TABLE `duenos`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT de la tabla `historial_clinico`
 --
 ALTER TABLE `historial_clinico`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `mascotas`
 --
 ALTER TABLE `mascotas`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `roles`

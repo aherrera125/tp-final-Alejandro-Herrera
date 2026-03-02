@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
-  console.log("Token en dashboard:", token);
 
   if (!token) {
     console.log("No hay token, redirigiendo al login...");
@@ -35,7 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return res.json();
     })
     .then((data) => {
-      console.log("Datos del historial clínico:", data);
       renderHistorias(data);
     })
     .catch((err) => {
@@ -43,9 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
   function renderHistorias(historiales) {
-    console.log("Renderizando historiales:", historiales);
     table.innerHTML = "";
-
     historiales.forEach((h) => {
       table.innerHTML += `
       <tr>
@@ -65,48 +61,37 @@ document.addEventListener("DOMContentLoaded", () => {
         >
           <i class="fa-solid fa-magnifying-glass"></i>
         </button>
+        <button
+          class="btn btn-sm btn-outline-danger btn-eliminar"
+          data-id="${h.historialId}"
+          title="Eliminar"          
+       >
+         <i class="fa-solid fa-trash"></i>
+        </button>
       </td>
       </tr>`;
     });
   }
 
   table.addEventListener("click", (e) => {
-    const btn = e.target.closest(".btn-detalle");
-    if (!btn) return;
+    // si el usuario pulsó el icono de ver detalle
+    const detailBtn = e.target.closest(".btn-detalle");
+    if (detailBtn) {
+      const historialId = detailBtn.dataset.id;
+      detailHistorialClinico(historialId);
+      return;
+    }
 
-    const historialId = btn.dataset.id;
-    console.log("Ver detalle de historial:", historialId);
-
-    fetch(`http://localhost:3000/api/historialClinico/${historialId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
-        if (res.status === 401 || res.status === 403) {
-          console.error("Token no válido o sin permisos");
-          localStorage.removeItem("token");
-          window.location.href = "/index.html";
-          throw new Error("No autorizado");
-        }
-
-        if (!res.ok) {
-          throw new Error("Error HTTP " + res.status);
-        }
-
-        return res.json();
-      })
-      .then((data) => {
-        console.log("Datos del historial clínico:", data);
-        renderHistoriaDetalle(data);
-      })
-      .catch((err) => {
-        console.error("Error en fetch:", err);
-      });
+    // si el usuario pulsó el icono de la papelera/eliminar
+    const deleteBtn = e.target.closest(".btn-eliminar");
+    if (deleteBtn) {
+      const historialId = deleteBtn.dataset.id;
+      eliminarHistorial(historialId);
+      return;
+    }
   });
 
   function renderHistoriaDetalle(historialesDetalle) {
-    console.log("Renderizando detalle de una historia:", historialesDetalle);
     addHistorialButton.textContent = "Modificar";
     addHistorialButton.dataset.historialId =
       historialesDetalle.historialClinicoData.historiaId;
@@ -169,17 +154,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const direccion = document.getElementById("direccion").value.trim();
     const historial = document.getElementById("historial").value.trim();
 
-    console.log("Datos del formulario:", {
-      mascota,
-      edad,
-      especie,
-      nombreDuenio,
-      apellidoDuenio,
-      telefono,
-      direccion,
-      historial,
-    });
-
     if (
       !mascota ||
       !edad ||
@@ -196,22 +170,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Preparar los datos para el POST
     const data = {
-      nombre_duenio: nombreDuenio,
-      apellido_duenio: apellidoDuenio,
+      mascotaNombre: mascota,
+      mascotaEdad: parseInt(edad),
+      mascotaEspecie: especie,
+      duenioNombre: nombreDuenio,
+      duenioApellido: apellidoDuenio,
       telefono: telefono,
       direccion: direccion,
-      mascota: mascota,
-      edad_mascota: parseInt(edad),
-      raza: especie,
-      historial: historial,
+      descripcion: historial,
     };
 
     //Aqui evaluar si es historia nueva o modificar
-    console.log("Evaluando si es nuevo historial o modificación...");
     const btnText = addHistorialButton.textContent.trim();
-    console.log("Texto del botón:", btnText);
     if (btnText === "Guardar") {
-      // Hacer el fetch POST - Crear nuevo historial clínico
       fetch("http://localhost:3000/api/historialClinico", {
         method: "POST",
         headers: {
@@ -227,7 +198,6 @@ document.addEventListener("DOMContentLoaded", () => {
           return res.json();
         })
         .then((result) => {
-          console.log("Historial clínico creado:", result);
           // Recargar los datos para actualizar la tabla
           fetch("http://localhost:3000/api/historialClinico/byUserId", {
             headers: {
@@ -257,14 +227,14 @@ document.addEventListener("DOMContentLoaded", () => {
       // Hacer el fetch PUT – Modificar historial clínico existente
       const historialId = addHistorialButton.dataset.historialId;
       const data_update = {
-        nombre_duenio: nombreDuenio,
-        apellido_duenio: apellidoDuenio,
+        mascotaNombre: mascota,
+        mascotaEdad: parseInt(edad),
+        mascotaEspecie: especie,
+        duenioNombre: nombreDuenio,
+        duenioApellido: apellidoDuenio,
         telefono: telefono,
         direccion: direccion,
-        mascota: mascota,
-        edad_mascota: parseInt(edad),
-        raza: especie,
-        historial: historial,
+        descripcion: historial,
       };
       fetch(`http://localhost:3000/api/historialClinico/${historialId}`, {
         method: "PUT",
@@ -274,10 +244,23 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         body: JSON.stringify(data_update),
       })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error("Error HTTP " + res.status);
+          }
+          return res.json();
+        })
+        .then(() => {
+          return fetch("http://localhost:3000/api/historialClinico/byUserId", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+        })
         .then((res) => res.json())
         .then((data) => {
-          renderHistorias(data); // refresca la tabla
-          limpiarFormulario(); // limpia el modal
+          renderHistorias(data);
+          limpiarFormulario();
           const modal = bootstrap.Modal.getInstance(
             document.getElementById("modalMascota"),
           );
@@ -303,7 +286,76 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("historial").value = "";
   }
 
-  // Display vet name (Extra feature to keep the UI nice)
+  function detailHistorialClinico(historialId) {
+    fetch(`http://localhost:3000/api/historialClinico/${historialId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (res.status === 401 || res.status === 403) {
+          console.error("Token no válido o sin permisos");
+          localStorage.removeItem("token");
+          window.location.href = "/index.html";
+          throw new Error("No autorizado");
+        }
+
+        if (!res.ok) {
+          throw new Error("Error HTTP " + res.status);
+        }
+
+        return res.json();
+      })
+      .then((data) => {
+        renderHistoriaDetalle(data);
+      })
+      .catch((err) => {
+        console.error("Error en fetch:", err);
+      });
+  }
+
+  function eliminarHistorial(historialId) {
+    if (!confirm("¿Estás seguro de que quieres eliminar este historial?")) {
+      return;
+    }
+
+    fetch(`http://localhost:3000/api/historialClinico/${historialId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.status === 401 || res.status === 403) {
+          localStorage.removeItem("token");
+          window.location.href = "/index.html";
+          throw new Error("No autorizado");
+        }
+        if (!res.ok) {
+          throw new Error("Error al eliminar el historial clínico");
+        }
+        return res.json();
+      })
+      .then(() => {
+        return fetch("http://localhost:3000/api/historialClinico/byUserId", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        renderHistorias(data);
+        limpiarFormulario();
+        const modal = bootstrap.Modal.getInstance(
+          document.getElementById("modalMascota"),
+        );
+        modal.hide();
+      });
+  }
+
+  // Mostrar el nombre del veterinario logueado en el header
   const email = localStorage.getItem("loggedEmail");
   if (email && document.getElementById("logged-vet-name")) {
     const namePart = email
