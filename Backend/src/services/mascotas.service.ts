@@ -17,7 +17,7 @@ export const getMascotaById = async (id: string): Promise<IMascota | null> => {
 };
 
 export const addMascota = async (data: IMascota) => {
-  return await createMascota(data as any, parseInt(data.id_duenio));
+  return await createMascota(data as any, data.id_duenio);
 };
 
 export const editMascota = async (id: string, data: IHistorialClinicoDTO) => {

@@ -35,8 +35,8 @@ export const createDuenio = async (
   const [DuenioResult] = await pool.query(
     "INSERT INTO DUENOS (nombre, apellido, telefono, direccion) VALUES (?,?,?,?)",
     [
-      duenio.nombre_duenio,
-      duenio.apellido_duenio,
+      duenio.duenioNombre,
+      duenio.duenioApellido,
       duenio.telefono,
       duenio.direccion,
     ],
@@ -53,8 +53,8 @@ export const updateDuenio = async (
      SET nombre = ?, apellido = ?, telefono = ?, direccion = ?
      WHERE id = ?`,
     [
-      duenio.nombre_duenio,
-      duenio.apellido_duenio,
+      duenio.duenioNombre,
+      duenio.duenioApellido,
       duenio.telefono,
       duenio.direccion,
       id,

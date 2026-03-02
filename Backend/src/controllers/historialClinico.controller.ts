@@ -43,7 +43,6 @@ export const getByUserId = async (req: Request, res: Response) => {
       return res.status(401).json({ message: "Usuario no autenticado." });
     }
     const userId = req.user.id?.toString() ?? "";
-    console.log("Obteniendo historial clínico para el usuario con ID:", userId);
     const historialClinicoData =
       await historialClinicoService.getHistorialClinicoByUserId(userId);
 
