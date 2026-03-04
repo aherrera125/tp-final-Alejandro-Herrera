@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 import { JwtPayload } from "../types/auth";
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
-//const JWT_SECRET = "clave123";
 
 /**
  * Middleware de autenticación
