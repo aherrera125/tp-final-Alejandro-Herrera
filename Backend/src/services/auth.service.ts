@@ -30,7 +30,7 @@ export const register = async (
     especialidad,
   });
 
-  const UserRoleId = await userModel.createUserRole(userId, 2); // 2 = role "user"
+  const UserRoleId = await userModel.createUserRole(userId, 2);
 
   return userId;
 };
@@ -72,5 +72,4 @@ export const login = async (
    * Se firma el payload con el secreto y las opciones definidas
    */
   return jwt.sign(payload, secretKey, options);
-  //return jwt.sign(payload, "clave123", options);
 };
