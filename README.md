@@ -258,8 +258,17 @@ _Agregar capturas de pantalla del sistema aquí cuando estén disponibles._
 2. **Iniciar Frontend**: Ejecutar `npm run dev` en `Frontend/`
 3. **Acceder**: Abrir `http://localhost:5173` en el navegador
 4. **Login**: Usar las siguientes credenciales de ejemplo:
+   - Rol: Administrados
    - Email: luis.luna@patitasfelices.com
    - Contraseña: SecurePass125!
+
+   - Rol: Veterinario
+   - Email: alejandro.herrera@patitasfelices.com
+   - Contraseña: Password123!
+
+   - Rol: Secretario
+   - Email: juan.diaz@patitasfelices.com
+   - Contraseña: Secre1234!
 
    O registrar un nuevo usuario.
 

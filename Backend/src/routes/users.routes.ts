@@ -7,12 +7,13 @@ import {
   update,
   delet,
 } from "../controllers/users.controller";
+import { authorizePermission } from "../middlewares/authorizePermission.middleware";
 
 const router = Router();
-router.get("/", authenticate, authorize(["user"]), getAll);
-router.get("/me", authenticate, authorize(["user", "admin"]), getById);
-router.post("/", authenticate, authorize(["user"]), create);
-router.put("/", authenticate, authorize(["user"]), update);
-router.delete("/", authenticate, authorize(["user"]), delet);
+router.get("/", authenticate, authorizePermission("user:read"), getAll);
+router.get("/getById", authenticate, authorizePermission("user:read"), getById);
+router.post("/", authenticate, authorizePermission("user:create"), create);
+router.put("/", authenticate, authorizePermission("user:update"), update);
+router.delete("/", authenticate, authorizePermission("user:delete"), delet);
 
 export default router;

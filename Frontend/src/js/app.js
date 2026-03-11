@@ -16,8 +16,8 @@ if (loginForm) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: email, // luis.luna@patitasfelices.com
-        password: password, // SecurePass125!
+        email: email,
+        password: password,
       }),
     })
       .then((res) => {
@@ -26,9 +26,7 @@ if (loginForm) {
       })
       .then((data) => {
         localStorage.setItem("token", data.token);
-        // Also save email snippet for the greeting if name is not available in backend response
         localStorage.setItem("loggedEmail", email);
-
         window.location.href = "dashboard.html";
       })
       .catch((err) => {

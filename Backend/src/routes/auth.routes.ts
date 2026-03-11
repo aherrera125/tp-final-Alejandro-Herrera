@@ -5,6 +5,7 @@ import {
   loginValidator,
 } from "../validators/auth.validator";
 import rateLimit from "express-rate-limit";
+import { authorizePermission } from "../middlewares/authorizePermission.middleware";
 
 const router = Router();
 
@@ -16,7 +17,13 @@ const authLimiter = rateLimit({
 });
 
 //api/user/register
-router.post("/register", authLimiter, registerValidator, register);
+router.post(
+  "/register",
+  authorizePermission("user:create"),
+  authLimiter,
+  registerValidator,
+  register,
+);
 //api/user/login
 router.post("/login", authLimiter, loginValidator, login);
 

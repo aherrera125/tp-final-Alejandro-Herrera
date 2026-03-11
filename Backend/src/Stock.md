@@ -122,12 +122,12 @@ curl -sS -X DELETE http://localhost:3000/api/mascotas/5 \
 
 ## USUARIOS (VETERINARIOS)
 
-Las rutas de usuarios están expuestas en `/api/users`.
+Las rutas de usuarios están expuestas en `/api/user`.
 
 Obtener todos (requiere autorización `user`)
 
 ```bash
-curl -sS -X GET http://localhost:3000/api/users \
+curl -sS -X GET http://localhost:3000/api/user \
   -H "Authorization: Bearer $TOKEN"
 ```
 
@@ -138,20 +138,20 @@ curl -sS -X GET http://localhost:3000/api/users/byUserId \
   -H "Authorization: Bearer $TOKEN"
 ```
 
-Crear usuario (protegido según roles)
+Crear usuario (protegido según roles y permiso)
 
 ```bash
-curl -sS -X POST http://localhost:3000/api/users \
-  -H "Authorization: Bearer $TOKEN" \
+curl -sS -X POST http://localhost:3000/api/auth/register \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzcyNjUxNTIzLCJleHAiOjE3NzI3Mzc5MjMsImlzcyI6ImN1cnNvLXV0bi1iYWNrZW5kIn0.UNfCHe7bfDg90wYD58doVQGz-0uTsTN_BWZBasENMuE" \
   -H "Content-Type: application/json" \
   -d '{
-    "username": "nuevo",
-    "email": "nuevo@example.com",
-    "password": "Password123!",
-    "nombre": "Nombre",
-    "apellido": "Apellido",
-    "matricula": "MAT-001",
-    "especialidad": "Clinico"
+    "username": "jdiaz",
+    "email": "juan.diaz@patitasfelices.com",
+    "password": "Secre1234!",
+    "nombre": "Juan",
+    "apellido": "Diaz",
+    "especialidad": "Recepcionista",
+    "matricula": "secre-134"
   }'
 ```
 
@@ -224,13 +224,13 @@ Registrar un usuario (route: `/auth/register`)
 curl -sS -X POST http://localhost:3000/auth/register \
   -H "Content-Type: application/json" \
   -d '{
-    "username": "lluna",
-    "email": "luis.luna@patitasfelices.com",
-    "password": "SecurePass125!",
-    "nombre": "Luis",
-    "apellido": "Luna",
-    "matricula": "qwe113",
-    "especialidad": "Clinico"
+    "username": "jdiaz",
+    "email": "juan.diaz@patitasfelices.com",
+    "password": "Secre1234!",
+    "nombre": "Juan",
+    "apellido": "Diaz",
+    "especialidad": "Recepcionista",
+    "matricula": "secre-134"
   }'
 ```
 
