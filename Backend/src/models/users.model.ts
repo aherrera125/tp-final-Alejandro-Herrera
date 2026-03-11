@@ -6,13 +6,28 @@ import { ResultSetHeader } from "mysql2";
 export type UsuarioRow = IUsuario & RowDataPacket;
 
 export const findAllUsers = async (): Promise<IUsuario[]> => {
-  const [rows] = await pool.query<UsuarioRow[]>("SELECT * FROM USERS");
+  const [rows] = await pool.query<UsuarioRow[]>(
+    `SELECT us.nombre, 
+	    us.apellido, 
+      us.email,
+      us.username,
+      us.especialidad,
+      us.matricula,
+      us.status,
+      ro.name
+    FROM USERS us
+    INNER JOIN USER_ROLES ur on ur.user_id = us.id
+    INNER JOIN ROLES ro on ro.id = ur.role_id`,
+  );
   return rows;
 };
 
 export const findUserById = async (id: string): Promise<IUsuario | null> => {
   const [rows] = await pool.query<UsuarioRow[]>(
-    "SELECT * FROM USERS WHERE id = ?",
+    `SELECT us.username, ro.name rolename, us.status FROM USERS us
+    INNER JOIN user_roles ur on ur.user_id = us.id
+    INNER join roles ro on ro.id = ur.role_id
+    WHERE us.id =?`,
     [id],
   );
   return rows.length ? rows[0] : null;

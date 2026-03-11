@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
+  console.log("Token en dashboard:", token);
 
   if (!token) {
     console.log("No hay token, redirigiendo al login...");
@@ -8,11 +9,76 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const dashboardForm = document.getElementById("dashboardForm");
   const addHistorialButton = document.getElementById("addHistorialButton");
-  const table = document.getElementById("historialesTable");
+  const tableHistorial = document.getElementById("historialesTable");
+  const tableUsuarios = document.getElementById("usuariosTable");
   const cancelHistorialButton = document.getElementById(
     "cancelHistorialButton",
   );
   const closeHistorialButton = document.getElementById("closeHistorialButton");
+
+  fetch("http://localhost:3000/api/user/getById", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => {
+      if (res.status === 401 || res.status === 403) {
+        console.error("Token no válido o sin permisos");
+        throw new Error("No autorizado");
+      }
+
+      if (!res.ok) {
+        throw new Error("Error HTTP " + res.status);
+      }
+
+      return res.json();
+    })
+    .then((data) => {
+      console.log("Datos del usuario:", data);
+      localStorage.setItem("rol", data.usuarioData.rolename);
+      if (data.usuarioData.rolename !== "admin") {
+        console.log(
+          "Usuario no es admin, ocultando sección de usuarios, user role:",
+          data.usuarioData.rolename,
+        );
+        document.getElementById("div-usuarios").style.display = "none";
+      } else {
+        document.getElementById("div-usuarios").style.display = "block";
+        getAllUsers(data);
+      }
+    })
+    .catch((err) => {
+      console.error("Error en fetch:", err);
+    });
+
+  function getAllUsers() {
+    fetch("http://localhost:3000/api/user", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (res.status === 401 || res.status === 403) {
+          console.error("Token no válido o sin permisos");
+          localStorage.removeItem("token");
+          window.location.href = "/index.html";
+          throw new Error("No autorizado");
+        }
+
+        if (!res.ok) {
+          throw new Error("Error HTTP " + res.status);
+        }
+
+        return res.json();
+      })
+      .then((data) => {
+        console.log("Datos de usuarios:", data);
+        renderUsuarios(data.usuarioData);
+      })
+      .catch((err) => {
+        console.error("Error en fetch:", err);
+      });
+  }
 
   fetch("http://localhost:3000/api/historialClinico/byUserId", {
     headers: {
@@ -41,9 +107,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
   function renderHistorias(historiales) {
-    table.innerHTML = "";
+    tableHistorial.innerHTML = "";
     historiales.forEach((h) => {
-      table.innerHTML += `
+      tableHistorial.innerHTML += `
       <tr>
         <td>${h.nom_mascota}</td>
         <td>${h.edad_mascota}</td>
@@ -73,7 +139,24 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  table.addEventListener("click", (e) => {
+  function renderUsuarios(usuarios) {
+    tableUsuarios.innerHTML = "";
+    usuarios.forEach((u) => {
+      tableUsuarios.innerHTML += `
+      <tr>
+        <td>${u.nombre}</td>
+        <td>${u.apellido}</td>
+        <td>${u.email}</td>
+        <td>${u.especialidad}</td>
+        <td>${u.matricula}</td>
+        <td>${u.username}</td>
+        <td>${u.name}</td>
+        <td>${u.status}</td>
+      </tr>`;
+    });
+  }
+
+  tableHistorial.addEventListener("click", (e) => {
     // si el usuario pulsó el icono de ver detalle
     const detailBtn = e.target.closest(".btn-detalle");
     if (detailBtn) {
@@ -182,6 +265,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //Aqui evaluar si es historia nueva o modificar
     const btnText = addHistorialButton.textContent.trim();
+    const modal = bootstrap.Modal.getInstance(
+      document.getElementById("modalMascota"),
+    );
     if (btnText === "Guardar") {
       fetch("http://localhost:3000/api/historialClinico", {
         method: "POST",
@@ -214,14 +300,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
           limpiarFormulario();
 
-          const modal = bootstrap.Modal.getInstance(
-            document.getElementById("modalMascota"),
-          );
           modal.hide();
         })
         .catch((err) => {
           console.error("Error al crear historial clínico:", err);
-          alert("Error al crear el historial clínico. Inténtalo de nuevo.");
+          if (err.message.includes("401") || err.message.includes("403")) {
+            alert("Necesita habilitacion para poder crear historias clinicas.");
+            modal.hide();
+          } else {
+            alert("Error al crear el historial clínico. Inténtalo de nuevo.");
+          }
         });
     } else {
       // Hacer el fetch PUT – Modificar historial clínico existente
@@ -356,13 +444,29 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Mostrar el nombre del veterinario logueado en el header
+  const rol = localStorage.getItem("rol");
   const email = localStorage.getItem("loggedEmail");
+
   if (email && document.getElementById("logged-vet-name")) {
     const namePart = email
       .split("@")[0]
       .split(".")
       .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
       .join(" ");
-    document.getElementById("logged-vet-name").textContent = `Dr. ${namePart}`;
+
+    switch (rol) {
+      case "veterinario":
+        document.getElementById("logged-vet-name").textContent =
+          `Dr. ${namePart}`;
+        break;
+      case "admin":
+        document.getElementById("logged-vet-name").textContent =
+          `Admin: ${namePart}`;
+        break;
+      case "secretario":
+        document.getElementById("logged-vet-name").textContent =
+          `Secretario: ${namePart}`;
+        break;
+    }
   }
 });

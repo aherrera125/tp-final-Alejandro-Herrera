@@ -41,7 +41,43 @@
     </nav>
 
     <div class="container dashboard-container">
-      <div class="glass-card">
+      <div id="div-usuarios" class="glass-card">
+        <div
+          id="screenUsuarios"
+          class="d-flex justify-content-between align-items-center mb-4 flex-wrap"
+        >
+          <h3 class="mb-2">Usuarios</h3>
+          <button
+            class="btn btn-primary btn-premium mb-2"
+            data-bs-toggle="modal"
+            data-bs-target="#modalUsuario"
+          >
+            + Nuevo Usuario
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table id="tabla-usuarios" class="table table-hover align-middle">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                <th>Especialidad</th>
+                <th>Matricula</th>
+                <th>Usuario</th>
+                <th>Rol</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="usuariosTable">
+              <!-- Records will be injected here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="div-historiales" class="glass-card">
         <div
           class="d-flex justify-content-between align-items-center mb-4 flex-wrap"
         >
@@ -182,6 +218,110 @@
                 <button
                   type="button"
                   id="addHistorialButton"
+                  class="btn btn-primary btn-premium"
+                >
+                  Guardar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Modal botstrap - Crear usuarios-->
+    <div class="modal fade" id="modalUsuario" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div
+          class="modal-content glass-card p-0"
+          style="border: none; backdrop-filter: none"
+        >
+          <div class="modal-header border-0 p-4">
+            <h5 class="modal-title fw-bold">Nuevo Usuario</h5>
+            <button
+              type="button"
+              id="closeUsuarioButton"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body p-4">
+            <form id="addUsuarioForm">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Nombre</label>
+                  <input
+                    type="text"
+                    id="nombreDuenio"
+                    class="form-control"
+                    required
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Apellido</label>
+                  <input
+                    type="text"
+                    id="apellidoDuenio"
+                    class="form-control"
+                    required
+                  />
+                </div>
+                <div class="col-md-8">
+                  <label class="form-label">Email</label>
+                  <input type="text" id="email" class="form-control" required />
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Especialidad</label>
+                  <input
+                    type="text"
+                    id="especialidad"
+                    class="form-control"
+                    required
+                  />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Matricula</label>
+                  <input
+                    type="text"
+                    id="matricula"
+                    class="form-control"
+                    required
+                  />
+                </div>
+                <div class="col-md-5">
+                  <label class="form-label">usuario</label>
+                  <input
+                    type="text"
+                    id="nombreUsuario"
+                    class="form-control"
+                    required
+                  />
+                </div>
+
+                <div class="col-md-4">
+                  <label class="form-label">Password</label>
+                  <input
+                    type="text"
+                    id="password"
+                    class="form-control"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mt-4 text-end">
+                <button
+                  type="button"
+                  id="cancelUsuarioButton"
+                  class="btn btn-secondary me-2"
+                  data-bs-dismiss="modal"
+                >
+                  Cancelar
+                </button>
+
+                <button
+                  type="button"
+                  id="addUsuarioButton"
                   class="btn btn-primary btn-premium"
                 >
                   Guardar
