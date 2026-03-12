@@ -19,6 +19,7 @@ export const register = async (req: Request, res: Response) => {
       matricula,
       especialidad,
     } = req.body;
+
     await authService.register(
       username,
       email,

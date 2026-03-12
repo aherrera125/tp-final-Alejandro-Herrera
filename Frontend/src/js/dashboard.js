@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const dashboardForm = document.getElementById("dashboardForm");
   const addHistorialButton = document.getElementById("addHistorialButton");
+  const addUsuarioButton = document.getElementById("addUsuarioButton");
   const tableHistorial = document.getElementById("historialesTable");
   const tableUsuarios = document.getElementById("usuariosTable");
   const cancelHistorialButton = document.getElementById(
@@ -217,12 +218,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   cancelHistorialButton.addEventListener("click", function (e) {
     addHistorialButton.textContent = "Guardar";
-    limpiarFormulario();
+    limpiarFormularioHistorial();
   });
 
   closeHistorialButton.addEventListener("click", function (e) {
     addHistorialButton.textContent = "Guardar";
-    limpiarFormulario();
+    limpiarFormularioHistorial();
   });
 
   function agregarHistorial(e) {
@@ -298,7 +299,7 @@ document.addEventListener("DOMContentLoaded", () => {
               console.error("Error al recargar historiales:", err),
             );
 
-          limpiarFormulario();
+          limpiarFormularioHistorial();
 
           modal.hide();
         })
@@ -348,7 +349,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((res) => res.json())
         .then((data) => {
           renderHistorias(data);
-          limpiarFormulario();
+          limpiarFormularioHistorial();
           const modal = bootstrap.Modal.getInstance(
             document.getElementById("modalMascota"),
           );
@@ -363,7 +364,71 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function limpiarFormulario() {
+  addUsuarioButton.addEventListener("click", function (e) {
+    agregarUsuario(e);
+  });
+
+  function agregarUsuario(e) {
+    const nombre = document.getElementById("nombreUsuario").value.trim();
+    const apellido = document.getElementById("apellidoUsuario").value.trim();
+    const email = document.getElementById("emailUsuario").value.trim();
+    const especialidad = document
+      .getElementById("especialidadUsuario")
+      .value.trim();
+    const matricula = document.getElementById("matriculaUsuario").value.trim();
+    const username = document.getElementById("usernameUsuario").value.trim();
+    const password = document.getElementById("passwordUsuario").value.trim();
+    //const rol = document.getElementById("rol").value.trim();
+
+    if (
+      !nombre ||
+      !apellido ||
+      !email ||
+      !especialidad ||
+      !matricula ||
+      !username ||
+      !password
+    ) {
+      alert("Por favor completá todos los campos");
+      return;
+    }
+
+    const data = {
+      nombre: nombre,
+      apellido: apellido,
+      email: email,
+      especialidad: especialidad,
+      matricula: matricula,
+      username: username,
+      password: password,
+    };
+
+    fetch("http://localhost:3000/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Error HTTP " + res.status);
+        }
+        return res.json();
+      })
+      .then(() => {
+        alert("Usuario agregado correctamente");
+        limpiarFormularioUsuario();
+      })
+
+      .catch((err) => {
+        console.error("Error al agregar usuario:", err);
+        alert("Error al agregar el usuario. Inténtalo de nuevo.");
+      });
+  }
+
+  function limpiarFormularioHistorial() {
     document.getElementById("mascota").value = "";
     document.getElementById("especie").value = "";
     document.getElementById("edadMascota").value = "";
@@ -372,6 +437,16 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("telefono").value = "";
     document.getElementById("direccion").value = "";
     document.getElementById("historial").value = "";
+  }
+
+  function limpiarFormularioUsuario() {
+    document.getElementById("nombreUsuario").value = "";
+    document.getElementById("apellidoUsuario").value = "";
+    document.getElementById("emailUsuario").value = "";
+    document.getElementById("especialidadUsuario").value = "";
+    document.getElementById("matriculaUsuario").value = "";
+    document.getElementById("usernameUsuario").value = "";
+    document.getElementById("passwordUsuario").value = "";
   }
 
   function detailHistorialClinico(historialId) {
@@ -435,7 +510,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .then((res) => res.json())
       .then((data) => {
         renderHistorias(data);
-        limpiarFormulario();
+        limpiarFormularioHistorial();
         const modal = bootstrap.Modal.getInstance(
           document.getElementById("modalMascota"),
         );

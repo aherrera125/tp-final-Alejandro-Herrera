@@ -141,7 +141,7 @@ curl -sS -X GET http://localhost:3000/api/users/byUserId \
 Crear usuario (protegido según roles y permiso)
 
 ```bash
-curl -sS -X POST http://localhost:3000/api/auth/register \
+curl -sS -X POST http://localhost:3000/auth/register \
   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzcyNjUxNTIzLCJleHAiOjE3NzI3Mzc5MjMsImlzcyI6ImN1cnNvLXV0bi1iYWNrZW5kIn0.UNfCHe7bfDg90wYD58doVQGz-0uTsTN_BWZBasENMuE" \
   -H "Content-Type: application/json" \
   -d '{

@@ -191,8 +191,8 @@ DELIMITER $$
 CREATE TRIGGER `assign_user_role` AFTER INSERT ON `users` FOR EACH ROW BEGIN
   DECLARE userRoleId INT;
 
-  -- Buscar ID del rol 'user'
-  SELECT id INTO userRoleId FROM roles WHERE name = 'user' LIMIT 1;
+  -- Buscar ID del rol 'veterinario'
+  SELECT id INTO userRoleId FROM roles WHERE name = 'veterinario' LIMIT 1;
 
   -- Si lo encontró, insertamos
   IF userRoleId IS NOT NULL THEN

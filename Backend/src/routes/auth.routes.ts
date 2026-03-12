@@ -6,6 +6,7 @@ import {
 } from "../validators/auth.validator";
 import rateLimit from "express-rate-limit";
 import { authorizePermission } from "../middlewares/authorizePermission.middleware";
+import { authenticate } from "../middlewares/auth.middleware";
 
 const router = Router();
 
@@ -16,15 +17,16 @@ const authLimiter = rateLimit({
   message: "Demasiados intentos, inténtalo de nuevo más tarde",
 });
 
-//api/user/register
+//auth/register
 router.post(
   "/register",
+  authenticate,
   authorizePermission("user:create"),
   authLimiter,
   registerValidator,
   register,
 );
-//api/user/login
+//auth/login
 router.post("/login", authLimiter, loginValidator, login);
 
 export default router;
