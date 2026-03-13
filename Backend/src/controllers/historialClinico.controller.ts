@@ -5,7 +5,6 @@ import {
   IHistorialClinicoDTO,
 } from "../types/IHistorialClinico";
 
-//getAll
 export const getAll = async (_req: Request, res: Response) => {
   try {
     const historialClinicoData =
@@ -18,7 +17,6 @@ export const getAll = async (_req: Request, res: Response) => {
   }
 };
 
-//getById
 export const getById = async (_req: Request, res: Response) => {
   const { id } = _req.params;
   try {
@@ -36,7 +34,7 @@ export const getById = async (_req: Request, res: Response) => {
       .json({ message: `Error al obtener el historial clínico con id ${id}.` });
   }
 };
-//getByUserId
+
 export const getByUserId = async (req: Request, res: Response) => {
   try {
     if (!req.user) {
@@ -59,7 +57,7 @@ export const getByUserId = async (req: Request, res: Response) => {
     });
   }
 };
-//create()
+
 export const create = async (req: Request, res: Response) => {
   try {
     if (!req.user) {
@@ -81,7 +79,7 @@ export const create = async (req: Request, res: Response) => {
       .json({ message: `Error al crear el Historial Clinico.` });
   }
 };
-//update()
+
 export const update = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
@@ -105,7 +103,7 @@ export const update = async (req: Request, res: Response) => {
     });
   }
 };
-//delete()
+
 export const delet = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;

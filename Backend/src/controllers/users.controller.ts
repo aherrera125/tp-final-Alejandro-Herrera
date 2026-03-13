@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { IUsuario } from "../types/IUsuario";
 import * as usersService from "../services/users.service";
 
-//getAll
 export const getAll = async (_req: Request, res: Response) => {
   try {
     const usuarioData = await usersService.getAllUsuarios();
@@ -12,7 +11,6 @@ export const getAll = async (_req: Request, res: Response) => {
   }
 };
 
-//getById
 export const getById = async (req: Request, res: Response) => {
   if (!req.user) {
     return res.status(401).json({ message: "Usuario no autenticado." });
@@ -33,7 +31,7 @@ export const getById = async (req: Request, res: Response) => {
       .json({ message: `Error al obtener el usuario con id ${userId}.` });
   }
 };
-//create()
+
 export const create = async (req: Request, res: Response) => {
   try {
     const usuarioData: IUsuario = req.body;
@@ -43,7 +41,7 @@ export const create = async (req: Request, res: Response) => {
     return res.status(500).json({ message: `Error al crear el usuario.` });
   }
 };
-//update()
+
 export const update = async (req: Request, res: Response) => {
   if (!req.user) {
     return res.status(401).json({ message: "Usuario no autenticado." });
@@ -67,7 +65,7 @@ export const update = async (req: Request, res: Response) => {
       .json({ message: `Error al actualizar los datos del usuario.` });
   }
 };
-//delete()
+
 export const delet = async (req: Request, res: Response) => {
   if (!req.user) {
     return res.status(401).json({ message: "Usuario no autenticado." });
