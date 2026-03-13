@@ -6,6 +6,7 @@ import dueniosRoutes from "./routes/duenios.routes";
 import mascotasRoutes from "./routes/mascotas.routes";
 import userRoutes from "./routes/users.routes";
 import historialClinicoRoutes from "./routes/historialClinico.routes";
+import rolesRoutes from "./routes/roles.routes";
 import cors from "cors";
 
 // Creamos la aplicación Express
@@ -37,6 +38,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/duenios", dueniosRoutes);
 app.use("/api/mascotas", mascotasRoutes);
 app.use("/api/historialClinico", historialClinicoRoutes);
+app.use("/api/roles", rolesRoutes);
 
 // Iniciar el servidor HTTP
 app.listen(PORT, () => {

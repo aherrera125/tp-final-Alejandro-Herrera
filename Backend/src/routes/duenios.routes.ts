@@ -16,12 +16,6 @@ router.get(
   authorize(["user", "admin"]),
   dueniosController.getById,
 );
-/*router.post(
-  "/",
-  authenticate,
-  authorize(["user", "admin"]),
-  dueniosController.create,
-);*/
 router.put(
   "/:id",
   authenticate,

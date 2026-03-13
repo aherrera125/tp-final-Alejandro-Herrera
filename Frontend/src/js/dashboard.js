@@ -439,16 +439,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("historial").value = "";
   }
 
-  function limpiarFormularioUsuario() {
-    document.getElementById("nombreUsuario").value = "";
-    document.getElementById("apellidoUsuario").value = "";
-    document.getElementById("emailUsuario").value = "";
-    document.getElementById("especialidadUsuario").value = "";
-    document.getElementById("matriculaUsuario").value = "";
-    document.getElementById("usernameUsuario").value = "";
-    document.getElementById("passwordUsuario").value = "";
-  }
-
   function detailHistorialClinico(historialId) {
     fetch(`http://localhost:3000/api/historialClinico/${historialId}`, {
       headers: {
@@ -516,6 +506,55 @@ document.addEventListener("DOMContentLoaded", () => {
         );
         modal.hide();
       });
+  }
+
+  const modalUsuarios = document.getElementById("modalUsuario");
+
+  modalUsuarios.addEventListener("show.bs.modal", function () {
+    //evaluar si es nuevo o modificar, por ahora solo nuevo,
+    //si es modificar se deberia cargar el detalle del usuario en el form
+    limpiarFormularioUsuario();
+    cargarRoles();
+  });
+
+  function limpiarFormularioUsuario() {
+    document.getElementById("nombreUsuario").value = "";
+    document.getElementById("apellidoUsuario").value = "";
+    document.getElementById("emailUsuario").value = "";
+    document.getElementById("especialidadUsuario").value = "";
+    document.getElementById("matriculaUsuario").value = "";
+    document.getElementById("usernameUsuario").value = "";
+    document.getElementById("passwordUsuario").value = "";
+  }
+
+  function cargarRoles() {
+    fetch("http://localhost:3000/api/roles", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Roles obtenidos:", data);
+        renderRoles(data.rolesData);
+      })
+      .catch((err) => {
+        console.error("Error cargando roles:", err);
+      });
+  }
+
+  function renderRoles(roles) {
+    const select = document.getElementById("rolUsuario");
+
+    select.innerHTML = '<option value="">Seleccionar rol...</option>';
+
+    roles.forEach((role) => {
+      const option = document.createElement("option");
+      option.value = role.id;
+      option.textContent = role.name;
+
+      select.appendChild(option);
+    });
   }
 
   // Mostrar el nombre del veterinario logueado en el header

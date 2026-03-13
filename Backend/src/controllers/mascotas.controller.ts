@@ -3,7 +3,6 @@ import { IMascota } from "../types/IMascota";
 import * as mascotasService from "../services/mascotas.service";
 import { IHistorialClinicoDTO } from "../types/IHistorialClinico";
 
-//getAll
 export const getAll = async (_req: Request, res: Response) => {
   try {
     const mascotaData = await mascotasService.getAllMascotas();
@@ -13,7 +12,6 @@ export const getAll = async (_req: Request, res: Response) => {
   }
 };
 
-//getById
 export const getById = async (_req: Request, res: Response) => {
   const { id } = _req.params;
   try {
@@ -28,7 +26,7 @@ export const getById = async (_req: Request, res: Response) => {
       .json({ message: `Error al obtener la mascota con id ${id}.` });
   }
 };
-//create()
+
 export const create = async (req: Request, res: Response) => {
   try {
     const mascotaData: IMascota = req.body;
@@ -38,7 +36,7 @@ export const create = async (req: Request, res: Response) => {
     return res.status(500).json({ message: `Error al crear la mascota.` });
   }
 };
-//update()
+
 export const update = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
@@ -56,7 +54,7 @@ export const update = async (req: Request, res: Response) => {
       .json({ message: `Error al actualizar los datos de la mascota.` });
   }
 };
-//delete()
+
 export const delet = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
