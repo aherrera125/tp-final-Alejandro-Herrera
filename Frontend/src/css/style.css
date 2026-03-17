@@ -76,12 +76,12 @@ body {
   border-bottom: 1px solid var(--glass-border);
 }
 
-/* Form Controls Dark Mode */
 .form-control,
 .form-select {
   background-color: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--glass-border);
   border-radius: 10px;
+  color: var(--text-light);
 }
 
 .form-control:focus {

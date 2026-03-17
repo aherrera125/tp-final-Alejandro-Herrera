@@ -61,7 +61,7 @@ export const createUser = async (
       usuario.apellido,
       usuario.matricula,
       usuario.especialidad,
-      1, // status por defecto activo
+      1,
     ],
   );
   return (usuarioResult as any).insertId;
