@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "cancelHistorialButton",
   );
   const closeHistorialButton = document.getElementById("closeHistorialButton");
+  const selectRol = document.getElementById("rolUsuario");
 
   fetch("http://localhost:3000/api/user/getById", {
     headers: {
@@ -378,7 +379,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const matricula = document.getElementById("matriculaUsuario").value.trim();
     const username = document.getElementById("usernameUsuario").value.trim();
     const password = document.getElementById("passwordUsuario").value.trim();
-    //const rol = document.getElementById("rol").value.trim();
+    const rol = document.getElementById("rolUsuario").value.trim();
 
     if (
       !nombre ||
@@ -387,7 +388,8 @@ document.addEventListener("DOMContentLoaded", () => {
       !especialidad ||
       !matricula ||
       !username ||
-      !password
+      !password ||
+      !rol
     ) {
       alert("Por favor completá todos los campos");
       return;
@@ -401,7 +403,9 @@ document.addEventListener("DOMContentLoaded", () => {
       matricula: matricula,
       username: username,
       password: password,
+      rol: rol,
     };
+    console.log("Datos a enviar para nuevo usuario:", data);
 
     fetch("http://localhost:3000/auth/register", {
       method: "POST",
@@ -514,7 +518,11 @@ document.addEventListener("DOMContentLoaded", () => {
     //evaluar si es nuevo o modificar, por ahora solo nuevo,
     //si es modificar se deberia cargar el detalle del usuario en el form
     limpiarFormularioUsuario();
-    cargarRoles();
+    cargarRoles(selectRol);
+  });
+
+  modalUsuarios.addEventListener("hidden.bs.modal", function () {
+    selectRol.innerHTML = "";
   });
 
   function limpiarFormularioUsuario() {
@@ -527,7 +535,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("passwordUsuario").value = "";
   }
 
-  function cargarRoles() {
+  function cargarRoles(selectRol) {
     fetch("http://localhost:3000/api/roles", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -536,26 +544,27 @@ document.addEventListener("DOMContentLoaded", () => {
       .then((res) => res.json())
       .then((data) => {
         console.log("Roles obtenidos:", data);
-        renderRoles(data.rolesData);
+        renderRoles(selectRol, data.rolesData);
       })
       .catch((err) => {
         console.error("Error cargando roles:", err);
       });
   }
 
-  function renderRoles(roles) {
-    const select = document.getElementById("rolUsuario");
-
-    select.innerHTML = '<option value="">Seleccionar rol...</option>';
-
+  function renderRoles(selectRol, roles) {
     roles.forEach((role) => {
       const option = document.createElement("option");
       option.value = role.id;
       option.textContent = role.name;
 
-      select.appendChild(option);
+      selectRol.appendChild(option);
     });
   }
+
+  selectRol.addEventListener("change", () => {
+    const selectedOption = selectRol.options[selectRol.selectedIndex];
+    return selectedOption.value;
+  });
 
   // Mostrar el nombre del veterinario logueado en el header
   const rol = localStorage.getItem("rol");

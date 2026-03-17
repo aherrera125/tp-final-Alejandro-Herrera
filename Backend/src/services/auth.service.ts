@@ -17,6 +17,7 @@ export const register = async (
   apellido: string,
   matricula: string,
   especialidad: string,
+  rol: string,
 ): Promise<number> => {
   const hashedPassword = await bcrypt.hash(password, 10);
 

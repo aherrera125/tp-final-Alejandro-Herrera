@@ -18,6 +18,7 @@ export const register = async (req: Request, res: Response) => {
       apellido,
       matricula,
       especialidad,
+      rolId,
     } = req.body;
 
     await authService.register(
@@ -28,6 +29,7 @@ export const register = async (req: Request, res: Response) => {
       apellido,
       matricula,
       especialidad,
+      rolId,
     );
 
     return res.status(201).json({ message: "Usuario creado exitosamente" });
