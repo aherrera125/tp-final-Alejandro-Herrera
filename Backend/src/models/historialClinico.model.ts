@@ -60,7 +60,8 @@ export const findHistorialClinicoByUserId = async (
      INNER JOIN users us ON us.id = hc.id_user
      INNER JOIN mascotas ma ON ma.id = hc.id_mascota
      INNER JOIN duenos d ON d.id = ma.id_dueno
-     WHERE us.id = ? AND hc.status = 1`,
+     WHERE us.id = ? AND hc.status = 1
+     ORDER BY hc.fecha_registro DESC`,
     [userId],
   );
   return rows;

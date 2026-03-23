@@ -17,7 +17,8 @@ export const findAllUsers = async (): Promise<IUsuario[]> => {
       ro.name
     FROM USERS us
     INNER JOIN USER_ROLES ur on ur.user_id = us.id
-    INNER JOIN ROLES ro on ro.id = ur.role_id`,
+    INNER JOIN ROLES ro on ro.id = ur.role_id
+    ORDER BY US.id DESC`,
   );
   return rows;
 };
@@ -89,7 +90,7 @@ export const updateUser = async (
     return null;
   }
 
-  // volver a buscar la usuario actualizada
+  // volver a buscar al usuario actualizada
   const [rows] = await pool.query<UsuarioRow[]>(
     "SELECT * FROM USERS WHERE id = ?",
     [id],
@@ -110,8 +111,9 @@ export const deleteUser = async (id: string): Promise<boolean> => {
 
 export const createUserRole = async (
   userId: number,
-  roleId: number,
+  roleId: string,
 ): Promise<void> => {
+  console.log("auth.model: insert del rol del usuario");
   await pool.query(`INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)`, [
     userId,
     roleId,

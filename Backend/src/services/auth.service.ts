@@ -17,10 +17,9 @@ export const register = async (
   apellido: string,
   matricula: string,
   especialidad: string,
-  rol: string,
+  rolId: string,
 ): Promise<number> => {
   const hashedPassword = await bcrypt.hash(password, 10);
-
   const userId = await userModel.createUser({
     username,
     email,
@@ -30,8 +29,7 @@ export const register = async (
     matricula,
     especialidad,
   });
-
-  await userModel.createUserRole(userId, 2);
+  await userModel.createUserRole(userId, rolId);
 
   return userId;
 };

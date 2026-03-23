@@ -22,7 +22,7 @@ export const validateEmail: ValidationChain[] = [
 
 export const registerValidator: ValidationChain[] = [
   ...validateEmail,
-  ...validatePassword,
+  //...validatePassword,
   body("username")
     .isLength({ min: 3 })
     .withMessage("Username debe contener al menos 3 caracteres")
