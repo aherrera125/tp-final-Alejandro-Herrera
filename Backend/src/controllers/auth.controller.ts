@@ -20,7 +20,6 @@ export const register = async (req: Request, res: Response) => {
       especialidad,
       rolId,
     } = req.body;
-
     await authService.register(
       username,
       email,

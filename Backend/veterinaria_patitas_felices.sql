@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: mysql:3306
--- Tiempo de generación: 13-03-2026 a las 19:39:01
+-- Tiempo de generación: 23-03-2026 a las 21:30:52
 -- Versión del servidor: 8.0.44
 -- Versión de PHP: 8.3.26
 
@@ -11,9 +11,6 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
--- Base de datos: `veterinaria_patitas_felices`
-CREATE DATABASE IF NOT EXISTS veterinaria_patitas_felices;
-USE veterinaria_patitas_felices;
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -73,7 +70,8 @@ INSERT INTO `duenos` (`id`, `nombre`, `apellido`, `telefono`, `direccion`, `esta
 (31, 'Martin Maximiliano', 'Centenillo', '3815', 'Catamarca 1666', 0),
 (32, 'Maria Amanda', 'Rivadeneira', '3815456852', 'Pje. Juanez de Artaza 654', 1),
 (33, 'Alejandro', 'Herrera', '3815480223', 'Grod. Gutierrez 1259 Piso 14', 1),
-(34, 'dueño 1', 'apellido 1', '3815852123', 'No aplica 123', 1);
+(34, 'dueño 1', 'apellido 1', '3815852123', 'No aplica 123', 1),
+(35, 'un dueño', 'un apellido', '3815456798', 'la direcciona qui', 1);
 
 -- --------------------------------------------------------
 
@@ -108,7 +106,8 @@ INSERT INTO `historial_clinico` (`id`, `id_mascota`, `fecha_registro`, `descripc
 (11, 10, '2026-03-02 00:51:12', 'Es la oveja negra de la familia', 0, 5),
 (12, 11, '2026-03-03 17:46:13', 'no come la comidita', 1, 5),
 (13, 12, '2026-03-04 01:24:03', 'Se fue a vivir al campo, ya debe estar viejito', 1, 5),
-(14, 13, '2026-03-13 17:18:10', 'hay que bañarla', 1, 5);
+(14, 13, '2026-03-13 17:18:10', 'hay que bañarla', 1, 5),
+(15, 14, '2026-03-23 21:21:09', 'el historial aqui', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -141,7 +140,8 @@ INSERT INTO `mascotas` (`id`, `id_dueno`, `nombre`, `especie`, `estado`, `edad`)
 (10, 31, 'Blackicita', 'oveja', 0, 22),
 (11, 32, 'Pedrito', 'pez', 1, 1),
 (12, 33, 'Homero Jay', 'Perro', 1, 3),
-(13, 34, 'perro 1', 'perro', 1, 7);
+(13, 34, 'perro 1', 'perro', 1, 7),
+(14, 35, 'un Perro', 'perro', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -267,7 +267,12 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`, `created_at`, `updat
 (11, 'zlobato', 'zulma.lobato@patitasfelices.com', '$2b$10$QZ7knOEEwBHKhRcx/9YLW.t6XmpDcMFXXonKrUkOXV8N1WEuBeeeu', '2026-03-12 02:27:33', '2026-03-12 02:27:33', 'Zulma', 'Lobato', 'cortauñas', 'corta123', 1),
 (12, 'zlobata', 'zulmo.lobata@patitasfelices.com', '$2b$10$jhllhpke5HiLkbCElHRlnu8PpGsqiLuMCUAihF.GcwqdcSwatpROm', '2026-03-12 02:41:15', '2026-03-12 02:41:15', 'Zulmo', 'Lobata', 'pezuñas', 'rta123', 1),
 (13, 'jsiria', 'jonathan.siria@patitasfelices.com', '$2b$10$1MDcgd6DXq8RtNnK4FNKZepwAp/TQRG76z/dWWYpHFN9/4jjclPEi', '2026-03-12 03:00:01', '2026-03-12 03:00:01', 'Jonathan', 'Siria', 'Oculista', 'ocu147', 1),
-(14, 'mtucuman', 'manuela.tucuman@patitas.felices.com', '$2b$10$Yw7LI7grx5qYR/FlUXvp2.7rpMSKi.KNDMR/DpKMy2faWPsqTs5zu', '2026-03-12 03:05:32', '2026-03-12 03:05:32', 'Manuela', 'Tucuman', 'Enfermera', 'enfe123', 1);
+(14, 'mtucuman', 'manuela.tucuman@patitas.felices.com', '$2b$10$Yw7LI7grx5qYR/FlUXvp2.7rpMSKi.KNDMR/DpKMy2faWPsqTs5zu', '2026-03-12 03:05:32', '2026-03-12 03:05:32', 'Manuela', 'Tucuman', 'Enfermera', 'enfe123', 1),
+(15, 'Ozelaya', 'oscar.zelaya@patitasfelices.com', '$2b$10$YPBO1O7sp5OHO8jlK81PEuL3jVOa8XZC9qsS3JV3aaBA2WuiqW9Tu', '2026-03-17 19:12:48', '2026-03-17 19:12:48', 'Oscar', 'Zelaya', 'partero', 'par125', 1),
+(16, 'Ptest', 'usuario1@mail.com', '$2b$10$FOiA5jrYfY1PI76cUNnA1eFOZ7WPwsO8eQ2fAcLQmoAQg2xjHp07O', '2026-03-23 19:39:11', '2026-03-23 19:39:11', 'Usuario1', 'Prueba1', 'prueba1', 'pru123', 1),
+(17, 'Ptestdos', 'usuario2@mail.com', '$2b$10$938xvt.3RNttnPAoxeDWYuFz6k1ZD3dgwPxb5In40.mEoKivUAOD.', '2026-03-23 19:40:17', '2026-03-23 19:40:17', 'Usuario2', 'Prueba2', 'prueba2', 'pru122', 1),
+(18, 'Prueba3', 'mail3@test.com', '$2b$10$GTI93P5.a3zbmDIQ2h5wU.x13aLR22wVGNZF8vHguo7YrTu.LXmMm', '2026-03-23 20:42:04', '2026-03-23 20:42:04', 'Prueba3', 'Test3', 'mail3', 'matricula3', 1),
+(19, 'Prueba4', 'mail4@test.com', '$2b$10$5fIYJvYMxDmKOEItflAPpOQxMtZ.Tvky8JyRyjfTbYD2zltFmFMc2', '2026-03-23 20:56:00', '2026-03-23 20:56:00', 'Prueba4', 'Test4', 'mail4', 'Matri4', 1);
 
 -- --------------------------------------------------------
 
@@ -286,6 +291,8 @@ CREATE TABLE `user_roles` (
 
 INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES
 (5, 1),
+(17, 1),
+(19, 1),
 (1, 2),
 (2, 2),
 (4, 2),
@@ -295,8 +302,11 @@ INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES
 (12, 2),
 (13, 2),
 (14, 2),
+(15, 2),
+(18, 2),
 (3, 3),
-(7, 3);
+(7, 3),
+(16, 3);
 
 --
 -- Índices para tablas volcadas
@@ -366,19 +376,19 @@ ALTER TABLE `user_roles`
 -- AUTO_INCREMENT de la tabla `duenos`
 --
 ALTER TABLE `duenos`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT de la tabla `historial_clinico`
 --
 ALTER TABLE `historial_clinico`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `mascotas`
 --
 ALTER TABLE `mascotas`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `permissions`
@@ -396,7 +406,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- Restricciones para tablas volcadas
@@ -429,6 +439,6 @@ ALTER TABLE `user_roles`
   ADD CONSTRAINT `user_roles_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
--- /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
--- /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
--- /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

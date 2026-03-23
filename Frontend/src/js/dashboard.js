@@ -379,7 +379,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const matricula = document.getElementById("matriculaUsuario").value.trim();
     const username = document.getElementById("usernameUsuario").value.trim();
     const password = document.getElementById("passwordUsuario").value.trim();
-    const rol = document.getElementById("rolUsuario").value.trim();
+    const rolId = document.getElementById("rolUsuario").value.trim();
 
     if (
       !nombre ||
@@ -389,21 +389,21 @@ document.addEventListener("DOMContentLoaded", () => {
       !matricula ||
       !username ||
       !password ||
-      !rol
+      !rolId
     ) {
       alert("Por favor completá todos los campos");
       return;
     }
 
     const data = {
+      username: username,
+      email: email,
+      password: password,
       nombre: nombre,
       apellido: apellido,
-      email: email,
-      especialidad: especialidad,
       matricula: matricula,
-      username: username,
-      password: password,
-      rol: rol,
+      especialidad: especialidad,
+      rolId: rolId,
     };
     console.log("Datos a enviar para nuevo usuario:", data);
 
@@ -425,7 +425,6 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Usuario agregado correctamente");
         limpiarFormularioUsuario();
       })
-
       .catch((err) => {
         console.error("Error al agregar usuario:", err);
         alert("Error al agregar el usuario. Inténtalo de nuevo.");

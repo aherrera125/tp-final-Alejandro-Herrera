@@ -44,5 +44,3 @@ app.use("/api/roles", rolesRoutes);
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT} 🚀`);
 });
-
-// authenticate y authorize se usan en las tutas

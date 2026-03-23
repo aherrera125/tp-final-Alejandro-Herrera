@@ -25,7 +25,6 @@ export const authorizePermission = (permission: string) => {
         permission,
       });
     }
-
     next();
   };
 };
