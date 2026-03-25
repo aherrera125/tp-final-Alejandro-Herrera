@@ -12,6 +12,8 @@ import cors from "cors";
 // Creamos la aplicación Express
 const app = express();
 
+app.set("trust proxy", 1);
+
 // Configuracion CORS para permitir solicitudes desde el frontend
 app.use(
   cors({
