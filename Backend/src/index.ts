@@ -27,17 +27,6 @@ app.use(
   }),
 );
 
-// Asegura que todas las rutas respondan al preflight
-app.options("*", cors());
-
-/*app.use(
-  cors({
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  }),
-);*/
-
 // Definimos el puerto del servidor
 const PORT = process.env.PORT || 3000;
 
