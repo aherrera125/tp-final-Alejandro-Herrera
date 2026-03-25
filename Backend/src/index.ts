@@ -40,6 +40,14 @@ app.use("/api/mascotas", mascotasRoutes);
 app.use("/api/historialClinico", historialClinicoRoutes);
 app.use("/api/roles", rolesRoutes);
 
+// Prueba endpoint base
+app.get("/", (req, res) => {
+  res.json({
+    status: "ok",
+    message: "API Patitas Felices funcionando en Render🐶",
+  });
+});
+
 // Iniciar el servidor HTTP
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT} 🚀`);
