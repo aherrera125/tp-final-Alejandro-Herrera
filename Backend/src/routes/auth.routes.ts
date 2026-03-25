@@ -27,6 +27,6 @@ router.post(
   register,
 );
 //auth/login
-router.post("/login", authLimiter, loginValidator, login);
+router.post("/login", /*authLimiter,*/ loginValidator, login);
 
 export default router;
