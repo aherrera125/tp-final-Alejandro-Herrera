@@ -28,7 +28,8 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 // Middleware para servir archivos estáticos desde la carpeta "public"
-app.use(express.static(path.join(__dirname, "..", "public")));
+// Solo si necesitamos servir HTML desde el backend
+//app.use(express.static(path.join(__dirname, "..", "public")));
 
 //Endpoint de registro y login
 app.use("/auth", authRoutes);
