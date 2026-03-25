@@ -18,10 +18,18 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://tp-final-ah-patitasfelices.vercel.app",
+      "https://tp-final-ah-patitasfeli-git-bcf83a-alejandros-projects-dfaa9e1d.vercel.app",
+      "https://tp-final-ah-patitasfelices-4f1e2e5s3.vercel.app",
     ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   }),
 );
+
+// Asegura que todas las rutas respondan al preflight
+app.options("*", cors());
+
 /*app.use(
   cors({
     origin: "http://localhost:5173",
