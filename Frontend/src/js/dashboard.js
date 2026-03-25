@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeHistorialButton = document.getElementById("closeHistorialButton");
   const selectRol = document.getElementById("rolUsuario");
 
-  fetch("http://localhost:3000/api/user/getById", {
+  fetch(`${import.meta.env.VITE_API_URL}/api/user/getById`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
   function getAllUsers() {
-    fetch("http://localhost:3000/api/user", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/user`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
 
-  fetch("http://localhost:3000/api/historialClinico/byUserId", {
+  fetch(`${import.meta.env.VITE_API_URL}/api/historialClinico/byUserId`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -271,7 +271,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("modalMascota"),
     );
     if (btnText === "Guardar") {
-      fetch("http://localhost:3000/api/historialClinico", {
+      fetch(`${import.meta.env.VITE_API_URL}/api/historialClinico`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -287,11 +287,14 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .then((result) => {
           // Recargar los datos para actualizar la tabla
-          fetch("http://localhost:3000/api/historialClinico/byUserId", {
-            headers: {
-              Authorization: `Bearer ${token}`,
+          fetch(
+            `${import.meta.env.VITE_API_URL}/api/historialClinico/byUserId`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             },
-          })
+          )
             .then((res) => res.json())
             .then((data) => {
               renderHistorias(data);
@@ -326,14 +329,17 @@ document.addEventListener("DOMContentLoaded", () => {
         direccion: direccion,
         descripcion: historial,
       };
-      fetch(`http://localhost:3000/api/historialClinico/${historialId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      fetch(
+        `${import.meta.env.VITE_API_URL}/api/historialClinico/${historialId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(data_update),
         },
-        body: JSON.stringify(data_update),
-      })
+      )
         .then((res) => {
           if (!res.ok) {
             throw new Error("Error HTTP " + res.status);
@@ -341,11 +347,14 @@ document.addEventListener("DOMContentLoaded", () => {
           return res.json();
         })
         .then(() => {
-          return fetch("http://localhost:3000/api/historialClinico/byUserId", {
-            headers: {
-              Authorization: `Bearer ${token}`,
+          return fetch(
+            `${import.meta.env.VITE_API_URL}/api/historialClinico/byUserId`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             },
-          });
+          );
         })
         .then((res) => res.json())
         .then((data) => {
@@ -407,7 +416,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     console.log("Datos a enviar para nuevo usuario:", data);
 
-    fetch("http://localhost:3000/auth/register", {
+    fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -443,11 +452,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function detailHistorialClinico(historialId) {
-    fetch(`http://localhost:3000/api/historialClinico/${historialId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    fetch(
+      `${import.meta.env.VITE_API_URL}/api/historialClinico/${historialId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    })
+    )
       .then((res) => {
         if (res.status === 401 || res.status === 403) {
           console.error("Token no válido o sin permisos");
@@ -474,14 +486,16 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!confirm("¿Estás seguro de que quieres eliminar este historial?")) {
       return;
     }
-
-    fetch(`http://localhost:3000/api/historialClinico/${historialId}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+    fetch(
+      `${import.meta.env.VITE_API_URL}/api/historialClinico/${historialId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       },
-    })
+    )
       .then((res) => {
         if (res.status === 401 || res.status === 403) {
           localStorage.removeItem("token");
@@ -494,11 +508,14 @@ document.addEventListener("DOMContentLoaded", () => {
         return res.json();
       })
       .then(() => {
-        return fetch("http://localhost:3000/api/historialClinico/byUserId", {
-          headers: {
-            Authorization: `Bearer ${token}`,
+        return fetch(
+          `${import.meta.env.VITE_API_URL}/api/historialClinico/byUserId`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-        });
+        );
       })
       .then((res) => res.json())
       .then((data) => {
@@ -535,7 +552,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function cargarRoles(selectRol) {
-    fetch("http://localhost:3000/api/roles", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/roles`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
