@@ -40,7 +40,7 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-export const login = async (req: Request, res: Response) => {
+/*export const login = async (req: Request, res: Response) => {
   try {
     // Verificar errores de validación
     const errors = validationResult(req);
@@ -57,5 +57,37 @@ export const login = async (req: Request, res: Response) => {
       return res.status(401).json({ error: "Credenciales inválidas" });
     }
     return res.status(500).json({ error: "Error al iniciar sesión" });
+  }
+};*/
+
+export const login = async (req: Request, res: Response) => {
+  console.log("🔥 LOGIN START");
+
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      console.log("❌ VALIDATION ERROR:", errors.array());
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { email, password } = req.body;
+    console.log("📩 EMAIL:", email);
+
+    const token = await authService.login(email, password);
+
+    console.log("✅ LOGIN OK");
+
+    return res.json({ token });
+  } catch (error: any) {
+    console.error("💥 LOGIN ERROR REAL:", error);
+
+    if (error.message === "Credenciales inválidas") {
+      return res.status(401).json({ error: "Credenciales inválidas" });
+    }
+
+    return res.status(500).json({
+      error: "Error al iniciar sesión",
+      detail: error.message, // 👈 clave para ver en frontend
+    });
   }
 };
